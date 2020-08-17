@@ -13,14 +13,31 @@ const JSON_FILE = process.env.JSON_FILE ? process.env.JSON_FILE : "produts.json"
 console.log("PORT:", process.env.PORT);
 console.log("process.env.JSON_FILE:", process.env.JSON_FILE);
 app.use(bodyParser.json());
+const path = require("path");
+const accesLogStream = fs.createWriteStream(
+    path.join(__dirname, "access.log"),
+    { flags: "a" }
+);
 
-const myLogger = (req, res, next) => {
-    console.log("someone enterd to my site", Date.now());
-    next();
-};
-app.use(myLogger);
+// const myLogger = (req, res, next) => {
+//     console.log("someone enterd to my site", Date.now());
+//     next();
+// };
+const morgan = require('morgan');
+
+// app.use(myLogger);
 
 app.use(cors());
+
+
+app.use(
+    morgan(
+
+        "METHOD: :method :url :status :res[content-length] - :response-time ms"
+    )
+);
+app.use(morgan('combined', { stream: accesLogStream }))
+
 
 app.post("/login", (req, res) => {
     const { email, pass } = req.body;
@@ -120,6 +137,15 @@ app.put("/products/:id", (req, res) => {
     });
 });
 
-app.listen(3000, () => {
+app.listen(process.env.PORT, () => {
     console.log("Example app listening on port", process.env.PORT);
 });
+
+//commits:
+//"add .ent to git ignore"
+//"add app.post with admin login from .env"
+//" adding .vscode to git ingnore"
+// adiing loger middleware to know someone enter to my site
+// install and use morgan
+//install and use morgan write to file to new file called access.log
+//
