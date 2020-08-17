@@ -9,8 +9,9 @@ const cors = require("cors");
 const dotenv = require('dotenv');
 dotenv.config();
 const PORT = process.env.PORT ? process.env.PORT : 8000;
+const JSON_FILE = process.env.JSON_FILE ? process.env.JSON_FILE : "produts.json";
 console.log("PORT:", process.env.PORT);
-
+console.log("process.env.JSON_FILE:", process.env.JSON_FILE);
 app.use(bodyParser.json());
 
 app.use(cors());
@@ -56,7 +57,7 @@ app.get("/products", async (req, res) => {
 app.post("/products", (req, res) => {
     console.log("for admin only: Adding new product");
     // console.log(req.body);
-    fs.readFile("products.json", (err, data) => {
+    fs.readFile(JSON_FILE, (err, data) => {
         const products = JSON.parse(data);
         const title = req.body.title;
         const image = req.body.image;
