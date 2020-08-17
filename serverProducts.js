@@ -16,7 +16,13 @@ app.use(bodyParser.json());
 
 app.use(cors());
 
+app.post("/login", (req, res) => {
+    const { email, pass } = req.body;
+    if (email === 'user@user.com' && pass === 123) {
 
+    }
+
+})
 
 
 // app.get("/", (req, res) => {
