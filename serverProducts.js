@@ -1,14 +1,15 @@
 
 const express = require("express");
-// const util = require('util');
-// const readFile = util.promisify(fs.readFile);
 const fs = require("fs");
+const util = require('util');
+const readFile = util.promisify(fs.readFile);
 const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
-// const dotenv = require('dotenv');
-// dotenv.config();
-console.log(process.env.PORT);
+const dotenv = require('dotenv');
+dotenv.config();
+const PORT = process.env.PORT ? process.env.PORT : 8000;
+console.log("PORT:", process.env.PORT);
 
 app.use(bodyParser.json());
 
@@ -21,22 +22,33 @@ app.use(cors());
 //     res.send("welcome to the store!");
 // });
 
-app.get("/products", (req, res) => {
+app.get("/products", async (req, res) => {
     console.log("products file can ce used now");
     console.log("QUERY:", req.query);
-    const search = req.query.search;
+    // const search = req.query.search;
+    const { search } = req.query;
+    const data = await readFile("products.json");
+    const products = JSON.parse(data);
+    if (search) {
+        const filteredProducts = products.filter((product) => product.title.includes(search));
+        res.send(filteredProducts);
+    } else {
+        res.send(products);
+    }
 
-    fs.readFile("products.json", (err, data) => {
-
-        const products = JSON.parse(data);
-        if (search) {
-            const filteredProducts = products.filter((product) => product.title.includes(search));
-            res.send(filteredProducts);
-        } else {
-            res.send(products);
-        }
-    });
 });
+// בלי אסינכ אוויט
+//     fs.readFile("products.json", (err, data) => {
+
+//         const products = JSON.parse(data);
+//         if (search) {
+//             const filteredProducts = products.filter((product) => product.title.includes(search));
+//             res.send(filteredProducts);
+//         } else {
+//             res.send(products);
+//         }
+//     });
+// });
 
 
 
