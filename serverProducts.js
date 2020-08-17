@@ -14,6 +14,12 @@ console.log("PORT:", process.env.PORT);
 console.log("process.env.JSON_FILE:", process.env.JSON_FILE);
 app.use(bodyParser.json());
 
+const myLogger = (req, res, next) => {
+    console.log("someone enterd to my site", Date.now());
+    next();
+};
+app.use(myLogger);
+
 app.use(cors());
 
 app.post("/login", (req, res) => {
