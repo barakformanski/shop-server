@@ -18,7 +18,7 @@ app.use(cors());
 
 app.post("/login", (req, res) => {
     const { email, pass } = req.body;
-    if (email === 'user@user.com' && pass === 123) {
+    if (email === process.env.ADMIN_EMAIL && pass === process.env.ADMIN_PASS) {
 
     }
 
