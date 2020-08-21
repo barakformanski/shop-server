@@ -49,7 +49,7 @@ app.post("/login", (req, res) => {
 
 app.post("/upload", (req, res) => {
     req.pipe(fs.createWriteStream(`src/images/${req.query.filename}`));
-    res.send("your image recived")
+    res.send("your image recived sucssesfuly")
 })
 // app.get("/", (req, res) => {
 //     res.send("welcome to the store!");
