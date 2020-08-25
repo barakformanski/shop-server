@@ -36,8 +36,10 @@ app.use(
         "METHOD: :method :url :status :res[content-length] - :response-time ms"
     )
 );
-app.use(morgan('combined', { stream: accesLogStream }))
+app.use(morgan('combined', { stream: accesLogStream }));
 
+// not working
+app.use("/images", express.static("src/images"));
 
 app.post("/login", (req, res) => {
     const { email, pass } = req.body;
@@ -48,8 +50,10 @@ app.post("/login", (req, res) => {
 })
 
 app.post("/upload", (req, res) => {
-    req.pipe(fs.createWriteStream(`src/images/${req.query.filename}`));
+    const userImage = req.pipe(fs.createWriteStream(`src/images/${req.query.filename}`));
+    console.log("userImage:", userImage);
     res.send("your image recived sucssesfuly")
+
 })
 // app.get("/", (req, res) => {
 //     res.send("welcome to the store!");
@@ -144,11 +148,3 @@ app.listen(process.env.PORT, () => {
     console.log("Example app listening on port", process.env.PORT);
 });
 
-//commits:
-//"add .ent to git ignore"
-//"add app.post with admin login from .env"
-//" adding .vscode to git ingnore"
-// adiing loger middleware to know someone enter to my site
-// install and use morgan
-//install and use morgan write to file to new file called access.log
-//
