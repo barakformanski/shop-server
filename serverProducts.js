@@ -111,6 +111,12 @@ app.post("/products", (req, res) => {
         const productToAdd = {
             id: products.length + 1,
             title: title,
+            image: image,
+            alt_image: alt_image,
+            price: price,
+            description: description,
+            quantity: quantity,
+            pdf_description: pdf_description,
         }
         products.push({
             "id": products.length + 1,
@@ -155,19 +161,19 @@ app.put("/products/:id", (req, res) => {
     });
 });
 
-const getApiAndEmit = (socket) => {
-    const response = Date.now();
-    socket.emit("FromAPI", response);
-};
+// const getApiAndEmit = (socket) => {
+//     const response = Date.now();
+//     socket.emit("FromAPI", response);
+// };
 
-let interval;
+// let interval;
 
 io.on("connection", (socket) => {
     console.log("new client connected");
-    if (interval) {
-        clearInterval(interval);
-    }
-    interval = setInterval(() => getApiAndEmit(socket), 1000);
+    // if (interval) {
+    //     clearInterval(interval);
+    // }
+    // interval = setInterval(() => getApiAndEmit(socket), 1000);
     socket.on("disconnect", () => {
         console.log("client disconnected");
         cleanInterval(interval);
