@@ -26,6 +26,11 @@ const accesLogStream = fs.createWriteStream(
 const morgan = require('morgan');
 
 // app.use(myLogger);
+// const socketServer = require('./src/modules/SocketServer.js')
+const http = require("http");
+const socketIo = require("socket.io");
+const server = http.createServer(app);
+const io = socketIo(server);
 
 app.use(cors());
 
@@ -90,6 +95,7 @@ app.get("/products", async (req, res) => {
 
 
 //  for admin only - add new product
+// i need to remove this option to admin page!!!
 app.post("/products", (req, res) => {
     console.log("for admin only: Adding new product");
     // console.log(req.body);
@@ -102,6 +108,10 @@ app.post("/products", (req, res) => {
         const description = req.body.description;
         const quantity = req.body.quantity;
         const pdf_description = req.body.pdf_description;
+        const productToAdd = {
+            id: products.length + 1,
+            title: title,
+        }
         products.push({
             "id": products.length + 1,
             "title": title,
@@ -116,6 +126,7 @@ app.post("/products", (req, res) => {
             // console.log(err);
             res.send("YOU SUCCEED!!!");
         });
+        io.emit("FromAPI", productToAdd)
     });
 });
 // for admin only- delete a product
@@ -143,6 +154,27 @@ app.put("/products/:id", (req, res) => {
         });
     });
 });
+
+const getApiAndEmit = (socket) => {
+    const response = Date.now();
+    socket.emit("FromAPI", response);
+};
+
+let interval;
+
+io.on("connection", (socket) => {
+    console.log("new client connected");
+    if (interval) {
+        clearInterval(interval);
+    }
+    interval = setInterval(() => getApiAndEmit(socket), 1000);
+    socket.on("disconnect", () => {
+        console.log("client disconnected");
+        cleanInterval(interval);
+    });
+});
+
+
 
 app.listen(process.env.PORT, () => {
     console.log("Example app listening on port", process.env.PORT);
