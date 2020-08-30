@@ -35,6 +35,7 @@ const io = socketIo(server);
 app.use(cors());
 
 
+
 app.use(
     morgan(
 
@@ -132,21 +133,27 @@ app.post("/products", (req, res) => {
             // console.log(err);
             res.send("YOU SUCCEED!!!");
         });
+
         io.emit("FromAPI", productToAdd)
     });
 });
 // for admin only- delete a product
-app.get("/products/:id", (req, res) => {
-    console.log(req.params);
+
+app.delete("/products/:id", (req, res) => {
     fs.readFile("products.json", (err, data) => {
         const products = JSON.parse(data);
         const productId = +req.params.id;
+        console.log(" const productId = +req.params.id:", productId);
         const productIndex = products.findIndex((product) => product.id === productId);
-        console.log(products[productIndex]);
-        res.send(products[productIndex]);
-        // res.send(req.params);
-    });
+        const deletedItemTitle = products[productIndex].title;
+        products.splice(productIndex, 1);
+        fs.writeFile("products.json", JSON.stringify(products), (err) => {
+            res.send(deletedItemTitle + (" deleted from products"));
+            // res.send(products[productIndex]);
+        })
+    })
 });
+
 
 // for admin only- update a product
 app.put("/products/:id", (req, res) => {
@@ -168,21 +175,23 @@ app.put("/products/:id", (req, res) => {
 
 // let interval;
 
-io.on("connection", (socket) => {
-    console.log("new client connected");
-    // if (interval) {
-    //     clearInterval(interval);
-    // }
-    // interval = setInterval(() => getApiAndEmit(socket), 1000);
-    socket.on("disconnect", () => {
-        console.log("client disconnected");
-        cleanInterval(interval);
-    });
-});
+// io.on("connection", (socket) => {
+//     console.log("new client connected");
+//     // if (interval) {
+//     //     clearInterval(interval);
+//     // }
+//     // interval = setInterval(() => getApiAndEmit(socket), 1000);
+//     socket.on("disconnect", () => {
+//         console.log("client disconnected");
+//         cleanInterval(interval);
+//     });
+// });
 
 
 
-app.listen(process.env.PORT, () => {
+// app.listen(process.env.PORT, () => {
+// console.log("Example app listening on port", process.env.PORT);
+server.listen(process.env.PORT, () => {
     console.log("Example app listening on port", process.env.PORT);
 });
 
