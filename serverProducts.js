@@ -92,6 +92,18 @@ app.get("/products", async (req, res) => {
 //         }
 //     });
 // });
+// productPage description about the products
+app.get("/products/:id", (req, res) => {
+    fs.readFile("products.json", (err, data) => {
+        const products = JSON.parse(data);
+        const productId = +req.params.id;
+        console.log(" const productId = +req.params.id:", productId);
+        const productIndex = products.findIndex((product) => product.id === productId);
+        const chosenItem = products[productIndex];
+        res.send(chosenItem);
+    })
+})
+
 
 
 
