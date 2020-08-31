@@ -108,42 +108,16 @@ app.get("/products/:id", (req, res) => {
 
 
 //  for admin only - add new product
-// i need to remove this option to admin page!!!
 app.post("/products", (req, res) => {
     console.log("for admin only: Adding new product");
     // console.log(req.body);
-    fs.readFile(JSON_FILE, (err, data) => {
+    fs.readFile("products.json", (err, data) => {
         const products = JSON.parse(data);
-        const title = req.body.title;
-        const image = req.body.image;
-        const alt_image = req.body.alt_image;
-        const price = req.body.price;
-        const description = req.body.description;
-        const quantity = req.body.quantity;
-        const pdf_description = req.body.pdf_description;
-        const productToAdd = {
-            id: products.length + 1,
-            title: title,
-            image: image,
-            alt_image: alt_image,
-            price: price,
-            description: description,
-            quantity: quantity,
-            pdf_description: pdf_description,
-        }
-        products.push({
-            "id": products.length + 1,
-            "title": title,
-            "image": image,
-            "alt_image": alt_image,
-            "price": price,
-            "description": description,
-            "quantity": quantity,
-            "pdf_description": pdf_description,
-        });
+        const productToAdd = req.body;
+        products.push(productToAdd);
         fs.writeFile("products.json", JSON.stringify(products), (err) => {
             // console.log(err);
-            res.send("YOU SUCCEED!!!");
+            res.send("YOU SUCCEED to add a new product!!!");
         });
 
         io.emit("FromAPI", productToAdd)
