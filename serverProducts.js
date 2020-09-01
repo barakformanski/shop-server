@@ -29,8 +29,11 @@ const morgan = require('morgan');
 // const socketServer = require('./src/modules/SocketServer.js')
 const http = require("http");
 const socketIo = require("socket.io");
+const { connect } = require("http2");
 const server = http.createServer(app);
 const io = socketIo(server);
+const mongoose = require('mongoose');
+
 
 app.use(cors());
 
@@ -123,6 +126,9 @@ app.post("/products", (req, res) => {
         io.emit("FromAPI", productToAdd)
     });
 });
+
+
+
 // for admin only- delete a product
 
 app.delete("/products/:id", (req, res) => {
@@ -154,6 +160,24 @@ app.put("/products/:id", (req, res) => {
     });
 });
 
+//  for admin only - update quantity
+app.put("/update_quantity/:id", (req, res) => {
+    fs.readFile("products.json", (err, data) => {
+        const products = JSON.parse(data);
+        const productId = +req.params.id;
+        const productIndex = products.findIndex((product) => product.id === productId);
+        products[productIndex].quantity = req.body.quantity;
+        const newQuantityOfProuduct = {
+            id: productId,
+            quantity: products[productIndex].quantity
+        }
+        fs.writeFile("products.json", JSON.stringify(products), (err) => {
+            res.send("quantity updated!!!");
+        });
+        io.emit("quantity_updated", newQuantityOfProuduct)
+    });
+});
+
 // const getApiAndEmit = (socket) => {
 //     const response = Date.now();
 //     socket.emit("FromAPI", response);
@@ -177,7 +201,67 @@ app.put("/products/:id", (req, res) => {
 
 // app.listen(process.env.PORT, () => {
 // console.log("Example app listening on port", process.env.PORT);
-server.listen(process.env.PORT, () => {
-    console.log("Example app listening on port", process.env.PORT);
+function connectToDB() {
+    return mongoose.connect('mongodb://localhost/shop',
+        {
+            useNewUrlParser: true,
+            useCreateIndex: true,
+            useUnifiedTopology: true,
+        }
+    );
+}
+
+connectToDB().then(() => {
+
+    const productSchema = new mongoose.Schema({
+        id: Number,
+        title: String,
+        image: String,
+        price: Number,
+        description: String,
+        quantity: Number,
+        pdf_description: String,
+    });
+
+    const Product = mongoose.model('Product', productSchema);
+
+    const aloeVereGel = new Product({
+        id: 1,
+        title: "ג'ל אלוורה  למריחה",
+        image: "https://gallery.foreverliving.com/gallery/ISR/image/products/skincare/aloeveragelly200.png",
+        price: 81,
+        description: "ג'ל האלוורה ידוע מזה אלפי שנים כמוצר על",
+        quantity: 40,
+        pdf_description: "https://gallery.foreverliving.com/gallery/ISR/download/products/Skin_care/61_Heb.pdf"
+    });
+    aloeVereGel.save();
+
+    const aloeHit = new Product({
+        id: 2,
+        title: "אלו היט לושן",
+        image: "https://gallery.foreverliving.com/gallery/ISR/image/products/skincare/Aloe-Heat-Lotion_200.png",
+        price: 81,
+        description: "אנחנו מכירים את ההרגשה של עייפות ושרירים דואבים",
+        quantity: 100,
+        pdf_description: "https://gallery.foreverliving.com/gallery/ISR/download/products/Skin_care/64_Heb.pdf"
+    });
+    aloeHit.save();
+
+    const aloeFirst = new Product({
+        id: 3,
+        title: "אלו פירסט",
+        image: "https://gallery.foreverliving.com/gallery/ISR/image/products/skincare/Aloe-Heat-Lotion_200.png",
+        price: 109,
+        description: "אף ערכת עזרה ראשונה אינה שלמה ללא האלו-פירסט",
+        quantity: 100,
+        pdf_description: "https://gallery.foreverliving.com/gallery/ISR/download/products/Skin_care/40_Heb.pdf"
+    });
+    aloeFirst.save();
+
+
+    server.listen(process.env.PORT, () => {
+        console.log("Example app listening on port", process.env.PORT);
+    });
+
 });
 
