@@ -35,6 +35,7 @@ const io = socketIo(server);
 const mongoose = require('mongoose');
 
 
+
 app.use(cors());
 
 
@@ -64,9 +65,6 @@ app.post("/upload", (req, res) => {
     res.send("your image recived sucssesfuly")
 
 })
-// app.get("/", (req, res) => {
-//     res.send("welcome to the store!");
-// });
 
 app.get("/products", async (req, res) => {
     console.log("products file can ce used now");
@@ -83,19 +81,7 @@ app.get("/products", async (req, res) => {
     }
 
 });
-// בלי אסינכ אוויט
-//     fs.readFile("products.json", (err, data) => {
 
-//         const products = JSON.parse(data);
-//         if (search) {
-//             const filteredProducts = products.filter((product) => product.title.includes(search));
-//             res.send(filteredProducts);
-//         } else {
-//             res.send(products);
-//         }
-//     });
-// });
-// productPage description about the products
 app.get("/products/:id", (req, res) => {
     fs.readFile("products.json", (err, data) => {
         const products = JSON.parse(data);
@@ -180,29 +166,6 @@ app.put("/update_quantity/:id", (req, res) => {
     });
 });
 
-// const getApiAndEmit = (socket) => {
-//     const response = Date.now();
-//     socket.emit("FromAPI", response);
-// };
-
-// let interval;
-
-// io.on("connection", (socket) => {
-//     console.log("new client connected");
-//     // if (interval) {
-//     //     clearInterval(interval);
-//     // }
-//     // interval = setInterval(() => getApiAndEmit(socket), 1000);
-//     socket.on("disconnect", () => {
-//         console.log("client disconnected");
-//         cleanInterval(interval);
-//     });
-// });
-
-
-
-// app.listen(process.env.PORT, () => {
-// console.log("Example app listening on port", process.env.PORT);
 function connectToDB() {
     return mongoose.connect('mongodb://localhost/shop',
         {
@@ -298,6 +261,6 @@ connectToDB().then((res) => {
     server.listen(process.env.PORT, () => {
         console.log("Example app listening on port", process.env.PORT);
     });
-
 });
+
 
