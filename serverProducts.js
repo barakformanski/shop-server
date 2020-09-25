@@ -30,11 +30,16 @@ const morgan = require('morgan');
 // const socketServer = require('./src/modules/SocketServer.js')
 const http = require("http");
 const socketIo = require("socket.io");
-const { connect } = require("http2");
+// const { connect } = require("http2");
 const server = http.createServer(app);
 const io = socketIo(server);
 
-
+io.on("connection", (socket) => {
+    console.log("שים לב! לקוח נוסף התחבר");
+    socket.on("disconnect", () => {
+        console.log("שים לב! לקוח פלוני סיים התנתק");
+    });
+});
 app.use(cors());
 
 
@@ -65,6 +70,127 @@ app.post("/upload", (req, res) => {
 
 })
 
+
+
+
+function connectToDB() {
+    return mongoose.connect('mongodb://localhost/shop',
+        {
+            useNewUrlParser: true,
+            useCreateIndex: true,
+            useUnifiedTopology: true,
+        }
+    );
+}
+
+
+connectToDB().then(() => {
+    server.listen(process.env.PORT, () => {
+        console.log("Example app listening on port", process.env.PORT)
+    });
+});
+
+
+app.get("/products", async (req, res) => {
+    console.log("res:", res);
+    const productsFromDB = await Product.find();
+    console.log("got products");
+    console.log("products:", productsFromDB);
+
+    try {
+        res.send(productsFromDB);
+    } catch (err) {
+        res.status(500).send(err);
+    }
+});
+
+app.get("/products/?search=userSearch", async (req, res) => {
+    const { userSearch } = req.query;
+    // const products = await Product.find();
+    const products = await Product.find({ title: { $regex: "userSearch", $options: "i" } }, function (err, docs) {
+        console.log("Partial Search Begins");
+        console.log(docs);
+    });
+    console.log("got search");
+    console.log("QUERY:", req.query);
+    console.log("QUERY:", req.query.search);
+    console.log("products:", products);
+
+    try {
+        res.send(products);
+    } catch (err) {
+        res.status(500).send(err);
+    }
+    // io.emit("product_added", product)
+});
+
+app.post('/products', async (req, res) => {
+    const product = new Product(req.body);
+
+    try {
+        await product.save();
+        res.send(product);
+        io.emit("product_added", product)
+
+    } catch (err) {
+        res.status(500).send(err);
+    }
+
+});
+
+
+
+app.delete('/products/:id', async (req, res) => {
+    try {
+        const product = await Product.findByIdAndDelete(req.params.id)
+
+        if (!product) res.status(404).send("No item found")
+        res.status(200).send()
+    } catch (err) {
+        res.status(500).send(err)
+    }
+    // io.emit("product_deleted", products)
+
+})
+
+// //  for admin only - update quantity
+// app.put("/update_quantity/:id", (req, res) => {
+//     fs.readFile("products.json", (err, data) => {
+//         const products = JSON.parse(data);
+//         const productId = +req.params.id;
+//         const productIndex = products.findIndex((product) => product.id === productId);
+//         products[productIndex].quantity = req.body.quantity;
+//         const newQuantityOfProuduct = {
+//             id: productId,
+//             quantity: products[productIndex].quantity
+//         }
+//         fs.writeFile("products.json", JSON.stringify(products), (err) => {
+//             res.send("quantity updated!!!");
+//         });
+//         io.emit("quantity_updated", newQuantityOfProuduct)
+//     });
+// });
+
+
+app.put('/update_product/:id', async (req, res) => {
+    try {
+        mongoose.set('useFindAndModify', false);
+        await Product.findByIdAndUpdate(req.params.id, req.body)
+        console.log("test", "req.params.id:", req.params.id, "req.body:", req.body);
+        console.log("Product saved:", Product);
+        await Product.save();
+        console.log("Product saved:", Product);
+        io.emit("product_updated", 1);
+        // io.emit("product_updated", Product);
+
+        res.send(Product);
+        console.log("updatedproduct", Product);
+        console.log("updatedproduct after emit", Product);
+
+    } catch (err) {
+        res.status(500).send(err)
+    }
+})
 // app.use('/', Routes);
 //  for admin only - add new product
 // app.post("/products", (req, res) => {
@@ -185,93 +311,13 @@ app.post("/upload", (req, res) => {
 
 
 
-function connectToDB() {
-    return mongoose.connect('mongodb://localhost/shop',
-        {
-            useNewUrlParser: true,
-            useCreateIndex: true,
-            useUnifiedTopology: true,
-        }
-    );
-}
-
-
-connectToDB().then(() => {
-    server.listen(process.env.PORT, () => {
-        console.log("Example app listening on port"), process.env.PO
-    });
-});
-
-app.post('/products', async (req, res) => {
-    const product = new Product(req.body);
-
-    try {
-        await product.save();
-        res.send(product);
-        io.emit("product_added", product)
-
-    } catch (err) {
-        res.status(500).send(err);
-    }
-
-});
-
-
-app.get("/products", async (req, res) => {
-    const products = await Product.find();
-    console.log("got products");
-    try {
-        res.send(products);
-    } catch (err) {
-        res.status(500).send(err);
-    }
-    // io.emit("product_added", product)
-
-});
-
-
-
-
-app.delete('/products/:id', async (req, res) => {
-    try {
-        const product = await Product.findByIdAndDelete(req.params.id)
-
-        if (!product) res.status(404).send("No item found")
-        res.status(200).send()
-    } catch (err) {
-        res.status(500).send(err)
-    }
-    // io.emit("product_deleted", products)
-
-})
-
-// //  for admin only - update quantity
-// app.put("/update_quantity/:id", (req, res) => {
-//     fs.readFile("products.json", (err, data) => {
-//         const products = JSON.parse(data);
-//         const productId = +req.params.id;
-//         const productIndex = products.findIndex((product) => product.id === productId);
-//         products[productIndex].quantity = req.body.quantity;
-//         const newQuantityOfProuduct = {
-//             id: productId,
-//             quantity: products[productIndex].quantity
-//         }
-//         fs.writeFile("products.json", JSON.stringify(products), (err) => {
-//             res.send("quantity updated!!!");
-//         });
-//         io.emit("quantity_updated", newQuantityOfProuduct)
-//     });
-// });
-
-
-app.put('/update_product/:id', async (req, res) => {
-    try {
-        await Product.findByIdAndUpdate(req.params.id, req.body)
-        await Product.save()
-        res.send(Product);
-        io.emit("product_updated", Product);
-
-    } catch (err) {
-        res.status(500).send(err)
-    }
-})
+// console.log("QUERY:", req.query);
+// const { search } = req.query;
+// // const data = await readFile("products.json");
+// // const products = JSON.parse(data);
+// if (search) {
+//     const filteredProducts = data.filter((product) => product.title.includes(search));
+//     res.send(filteredProducts);
+// } else {
+//     res.send(data);
+// }
