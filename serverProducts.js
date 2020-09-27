@@ -34,12 +34,25 @@ const socketIo = require("socket.io");
 const server = http.createServer(app);
 const io = socketIo(server);
 
+const gatApiAndEmit = (socket) => {
+    const respone = Date.now();
+    // Emitting a new messege. will be commited by the client
+    socket.emit("FromApi", respone)
+}
+let interval;
+
 io.on("connection", (socket) => {
     console.log("שים לב! לקוח נוסף התחבר");
+    if (interval) {
+        clearInterval(interval);
+    }
+    interval = setInterval(() => gatApiAndEmit(socket), 1000);
     socket.on("disconnect", () => {
         console.log("שים לב! לקוח פלוני סיים התנתק");
+        clearInterval(interval);
     });
 });
+
 app.use(cors());
 
 
@@ -130,11 +143,12 @@ app.post('/products', async (req, res) => {
     try {
         await product.save();
         res.send(product);
-        io.emit("product_added", product)
+        // io.emit("product_added", product)
 
     } catch (err) {
         res.status(500).send(err);
     }
+    io.emit("product_added", product)
 
 });
 
@@ -144,12 +158,14 @@ app.delete('/products/:id', async (req, res) => {
     try {
         const product = await Product.findByIdAndDelete(req.params.id)
 
-        if (!product) res.status(404).send("No item found")
-        res.status(200).send()
+        if (!product) res.status(404).send("No item found");
+        res.status(200).send(product);
+        io.emit("product_deleted", product)
+
     } catch (err) {
         res.status(500).send(err)
     }
-    // io.emit("product_deleted", products)
+
 
 })
 
