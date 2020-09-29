@@ -105,10 +105,10 @@ connectToDB().then(() => {
 
 
 app.get("/products", async (req, res) => {
-    console.log("res:", res);
+    // console.log("res:", res);
     const productsFromDB = await Product.find();
     console.log("got products");
-    console.log("products:", productsFromDB);
+    console.log("products from Mongo DB:", productsFromDB);
 
     try {
         res.send(productsFromDB);
@@ -143,12 +143,11 @@ app.post('/products', async (req, res) => {
     try {
         await product.save();
         res.send(product);
-        // io.emit("product_added", product)
+        io.emit("product_added", product)
 
     } catch (err) {
         res.status(500).send(err);
     }
-    io.emit("product_added", product)
 
 });
 
@@ -196,10 +195,10 @@ app.put('/update_product/:id', async (req, res) => {
         console.log("Product saved:", Product);
         await Product.save();
         console.log("Product saved:", Product);
-        io.emit("product_updated", 1);
         // io.emit("product_updated", Product);
 
-        res.send(Product);
+        res.send(Product, "product updated sucssefully!!!");
+        io.emit("product_updated", req.params.id, req.body);
         console.log("updatedproduct", Product);
         console.log("updatedproduct after emit", Product);
 
