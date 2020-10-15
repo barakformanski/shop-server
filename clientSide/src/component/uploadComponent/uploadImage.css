@@ -1,0 +1,6 @@
+.cartNumber {
+    position: absolute;
+    font-size: small;
+    float: right;
+    position: inherit;
+}

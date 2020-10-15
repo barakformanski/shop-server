@@ -1,0 +1,14 @@
+.product {
+    border-color: blue;
+    border-style: solid;
+    margin: 7px 21px -4px 10px;
+    float: left;
+    width: 20%;
+    height: 20%;
+    font-size: xx-small;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;  /* grid-template-rows:1fr 1fr 1fr; */
+    text-align: center;
+    align-items: center;
+    padding: 3px;
+}

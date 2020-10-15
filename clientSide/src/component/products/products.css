@@ -1,0 +1,16 @@
+.products {
+    border-style: solid;
+    border-color: orange;
+    margin: 10px 10px 10px 10px;
+    height: fit-content;
+    width: 80%;
+    float: left;
+    position: relative;
+}
+img{
+    
+height: 39px;
+width: 64px;
+}
+.quaninty{
+    margin: 33px 19px -45px 90px;}

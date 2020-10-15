@@ -1,0 +1,26 @@
+.app {
+  border-color: green;
+  border-style: solid;
+  height: 135vh;
+  margin: 10px 10px 10px 10px;
+}
+.get_products_button{
+  position: absolute;
+  text-align: center;
+  font-style: italic;
+  font-family: monospace;
+  color: orange;
+  top: 13px;
+  left: 14px;
+  height: 23px;
+  width: 110px;
+  font-size: initial;
+}
+
+.local_storage_button{
+  position: absolute;
+  top: 36px;
+  right: 109px;
+  width: min-content;
+}
+@import "~antd/dist/antd.css";

@@ -1,0 +1,35 @@
+.header{
+    height: 4%;
+    overflow: hidden;
+}
+.login_button{
+    /* height: auto; */
+    width: 20%;
+    border-color: orange;
+    border-style: solid;
+    margin: 0;
+    /* margin: 10px 10px 10px 10px; */
+    text-align: center;
+    font-size: initial;
+    font-style: italic;
+    font-family: monospace;
+    background-color: greenyellow;
+    color: orange;
+    float: right;
+    right: -12px;
+position:  absolute;
+
+}
+.header_text {
+    border-color: orange;
+    border-style: solid;
+    margin: 10px 10px 10px 10px;
+    text-align: center;
+    font-style: italic;
+    font-family: monospace;
+    background-color: greenyellow;
+    color: orange;
+    display: table-cell;
+    width: 40%;
+    right: 25px;
+}

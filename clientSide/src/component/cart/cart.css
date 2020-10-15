@@ -1,0 +1,35 @@
+.cart{
+  width:20%;
+  height: 100vh;
+  float: right;
+  border: greenyellow;
+  border-style: solid;
+  left: 100%;
+  position: absolute;
+
+
+}
+.caunter {
+  margin-left: 551px;
+  font-family: "Times New Roman", Times, serif;
+  float: right;
+
+  font-size: 35px;
+  color: red;
+}
+.cartImage{
+  height: 40%;
+  width: 100%;
+  float: right;
+
+}
+.cartNumber {
+  position: absolute;
+  font-size: small;
+  float: right;
+
+
+}
+productsInCart{
+  position: absolute;
+}

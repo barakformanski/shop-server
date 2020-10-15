@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 // the next line prefer to Routes.js file that i not useing yet
 // const Routes = require('./Routes');
 const mongoose = require('mongoose');
-const Product = require('./DBSchema/DBConfig');
+// const Product = require('./DBSchema/DBConfig');
 
 const cors = require("cors");
 const dotenv = require('dotenv');
@@ -30,6 +30,8 @@ const morgan = require('morgan');
 // const socketServer = require('./src/modules/SocketServer.js')
 const http = require("http");
 const socketIo = require("socket.io");
+const { stringify } = require("querystring");
+const { title } = require("process");
 // const { connect } = require("http2");
 const server = http.createServer(app);
 const io = socketIo(server);
@@ -68,6 +70,182 @@ app.use(morgan('combined', { stream: accesLogStream }));
 // not working
 app.use("/images", express.static("src/images"));
 
+
+
+const ProductSchema = new mongoose.Schema({
+    title: String,
+    image: String,
+    price: Number,
+    description: String,
+    quantity: Number,
+    pdf_description: String,
+});
+
+const UserSchema = new mongoose.Schema({
+    name: String,
+    email: String,
+    Password: String,
+    cellPhone: Number,
+    cartId: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Cart' }],
+})
+
+const CartSchema = new mongoose.Schema({
+    title: String,
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    products: [{ type: mongoose.Schema.Types.ObjectId, ref: 'ProductInCart' }],
+    total_cash: Number
+});
+
+
+const ProductInCartScehma = new mongoose.Schema({
+    cart: { type: mongoose.Schema.Types.ObjectId, ref: "Cart" },
+    products: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+    total_cash: Number,
+    quantityOnCart: Number,
+})
+
+
+const Product = mongoose.model('Product', ProductSchema);
+const User = mongoose.model("User", UserSchema);
+const Cart = mongoose.model("Cart", CartSchema);
+const ProductInCart = mongoose.model("ProductInCart", ProductInCartScehma);
+
+function connectToDB() {
+    return mongoose.connect('mongodb://localhost/shop',
+        {
+            useNewUrlParser: true,
+            useCreateIndex: true,
+            useUnifiedTopology: true,
+        }
+    );
+}
+
+
+connectToDB().then(async (res) => {
+    console.log("connected to DB");
+
+    // module.exports = { User, Product, Cart, ProductInCart }
+
+    const exampleUser = new User({
+        name: "fake user",
+        cart: [{ product: "fake product", quantity: 10, cash: 10 }]
+    });
+
+    // const userExample = await User
+    //     .findOne({ _id: "5f79a3dffcec3c143c2b2d1c" })
+    //     .populate("cart") // key to populate
+    //     .then(user => {
+    //         res.json(user);
+    //     });
+    // userExample.save();
+    // console.log("userExample:", userExample);
+    const Productdata = await Product.find().exec();
+    console.log("Productdata:", Productdata);
+
+
+    // app.post('/userCart', async (req, res) => {
+    //     console.log("req:", req.body);
+    //     const userCart = await new User(req.body);
+    //     userCart.save();
+
+    //     try {
+    //         await console.log("userCart:", userCart);
+    //         userCart.save();
+    //         res.send(userCart);
+    //         // io.emit("product_added", product)
+
+    //     } catch (err) {
+    //         res.status(500).send(err);
+    //     }
+
+    // });
+
+
+
+});
+
+
+
+app.post('/userCart', async (req, res) => {
+
+    const { name, password, email, productTitle } = req.body;
+    let user = await User.findOne({
+        name: name,
+        password: password,
+        email: email,
+        productTitle: productTitle
+    })
+    console.log("req:", req.body);
+
+    if (!user) {
+        user = new User(req.body);
+        await user.save();
+    }
+
+    let cartId = user.cartId[0];
+
+    const userId = user._id;
+
+    // try {
+    console.log("user:", user);
+    console.log("userId:", userId);
+
+    if (!cartId) {
+        console.log("no cart id, let's create new one:");
+        const newCart = new Cart({ user: user._id });
+        await newCart.save();
+        console.log("newCart:", newCart);
+        cartId = newCart._id;
+        console.log("cartId:", cartId);
+
+        await User.findByIdAndUpdate(
+            { _id: userId }, { cartId: [...user.cartId, cartId] },
+
+        );
+        // }
+        // io.emit("product_added", product)
+
+        // } catch (err) {
+        //     res.status(500).send(err);
+        // }
+
+    }
+    const product = await Product.findOne(
+        { title: productTitle }
+    ).exec();
+    console.log("product:", product);
+
+    const oldCart = await Cart.findOne({ _id: cartId })
+    const productInCart = await ProductInCart.findOne({ cart: cartId })
+    const quantityOnCart = 0;
+    if (!productInCart) {
+        const productInCart = new ProductInCart({
+            title: product.title,
+            cart: cartId,
+            quantityOnCart: quantityOnCart
+        })
+        await productInCart.save();
+
+        await Cart.findByIdAndUpdate(
+            { _id: cartId },
+            { products: [...oldCart.products, productInCart._id] }
+        ).exec();
+    } else {
+        await ProductInCart.findOneAndUpdate(
+            { _id: productInCart._id },
+            { quantityOnCart: quantityOnCart + 1 }
+        )
+    };
+    // res.send("cartId:", cartId);
+    res.status(200).send((cartId).toString());
+
+    // res.send("finisehd!, productInCart:", ProductInCart);
+});
+
+
+
+
+
 app.post("/login", (req, res) => {
     const { email, pass } = req.body;
     if (email === process.env.ADMIN_EMAIL && pass === process.env.ADMIN_PASS) {
@@ -82,60 +260,47 @@ app.post("/upload", (req, res) => {
     res.send("your image recived sucssesfuly")
 
 })
+app.post("/uploadNewProductImage", (req, res) => {
+    const userImage = req.pipe(fs.createWriteStream(`src/images/${req.query.filename}`));
+    console.log("userImage:", userImage);
+    res.send("your image recived sucssesfuly")
+
+})
 
 
 
 
-function connectToDB() {
-    return mongoose.connect('mongodb://localhost/shop',
-        {
-            useNewUrlParser: true,
-            useCreateIndex: true,
-            useUnifiedTopology: true,
-        }
-    );
-}
-
-
-connectToDB().then(() => {
-    server.listen(process.env.PORT, () => {
-        console.log("Example app listening on port", process.env.PORT)
-    });
-});
 
 
 app.get("/products", async (req, res) => {
-    // console.log("res:", res);
-    const productsFromDB = await Product.find();
-    console.log("got products");
-    console.log("products from Mongo DB:", productsFromDB);
-
-    try {
-        res.send(productsFromDB);
-    } catch (err) {
-        res.status(500).send(err);
-    }
-});
-
-app.get("/products/?search=userSearch", async (req, res) => {
-    const { userSearch } = req.query;
-    // const products = await Product.find();
-    const products = await Product.find({ title: { $regex: "userSearch", $options: "i" } }, function (err, docs) {
-        console.log("Partial Search Begins");
-        console.log(docs);
-    });
-    console.log("got search");
     console.log("QUERY:", req.query);
-    console.log("QUERY:", req.query.search);
-    console.log("products:", products);
-
-    try {
-        res.send(products);
-    } catch (err) {
-        res.status(500).send(err);
+    const userSearch = req.query.search;
+    console.log("userSearch:", userSearch);
+    if (userSearch) {
+        const filterdProducts = await Product.find(
+            { title: { $regex: userSearch, $options: "i" } },
+            (err, filterdProducts) => {
+                if (err) return console.error(err);
+                console.log("filterdProducts:", filterdProducts);
+                console.log("got search");
+                res.send(filterdProducts);
+            });
     }
-    // io.emit("product_added", product)
-});
+
+
+    else {
+        console.log("res:", res);
+        const productsFromDB = await Product.find();
+        console.log("got products");
+        console.log("products from Mongo DB:", productsFromDB);
+
+        try {
+            res.send(productsFromDB);
+        } catch (err) {
+            res.status(500).send(err);
+        }
+    };
+})
 
 app.post('/products', async (req, res) => {
     const product = new Product(req.body);
@@ -205,83 +370,15 @@ app.put('/update_product/:id', async (req, res) => {
     } catch (err) {
         res.status(500).send(err)
     }
-})
-// app.use('/', Routes);
-//  for admin only - add new product
-// app.post("/products", (req, res) => {
-//     console.log("for admin only: Adding new product");
-//     // console.log(req.body);
-//     fs.readFile("products.json", (err, data) => {
-//         const products = JSON.parse(data);
-//         const productToAdd = req.body;
-//         products.push(productToAdd);
-//         fs.writeFile("products.json", JSON.stringify(products), (err) => {
-//             // console.log(err);
-//             res.send("YOU SUCCEED to add a new product!!!");
-//         });
+})// app.use('/', Routes);
+    ;
 
-//         io.emit("FromAPI", productToAdd)
-//     });
-// });
+connectToDB().then(() => {
+    server.listen(process.env.PORT, () => {
 
-
-
-// for admin only- delete a product
-
-// app.delete("/products/:id", (req, res) => {
-//     fs.readFile("products.json", (err, data) => {
-//         const products = JSON.parse(data);
-//         const productId = +req.params.id;
-//         console.log(" const productId = +req.params.id:", productId);
-//         const productIndex = products.findIndex((product) => product.id === productId);
-//         const deletedItemTitle = products[productIndex].title;
-//         products.splice(productIndex, 1);
-//         fs.writeFile("products.json", JSON.stringify(products), (err) => {
-//             res.send(deletedItemTitle + (" deleted from products"));
-//             // res.send(products[productIndex]);
-//         })
-//         io.emit("product_deleted", products)
-
-//     })
-// });
-
-
-// //  for admin only - update quantity
-// app.put("/update_quantity/:id", (req, res) => {
-//     fs.readFile("products.json", (err, data) => {
-//         const products = JSON.parse(data);
-//         const productId = +req.params.id;
-//         const productIndex = products.findIndex((product) => product.id === productId);
-//         products[productIndex].quantity = req.body.quantity;
-//         const newQuantityOfProuduct = {
-//             id: productId,
-//             quantity: products[productIndex].quantity
-//         }
-//         fs.writeFile("products.json", JSON.stringify(products), (err) => {
-//             res.send("quantity updated!!!");
-//         });
-//         io.emit("quantity_updated", newQuantityOfProuduct)
-//     });
-// });
-
-
-
-// connectToDB().then(async (res) => {
-//     console.log("consol log:connected to DB");
-//     const productSchema = new mongoose.Schema({
-//         id: Number,
-//         title: String,
-//         image: String,
-//         price: Number,
-//         description: String,
-//         quantity: Number,
-//         pdf_description: String,
-//     });
-
-//     const Product = mongoose.model('Product', productSchema);
-//     const data = await Product.find().exec();
-// console.log("data:", data);
-
+        console.log("app is listening on port:", process.env.PORT, "   and connected to Mongo DB")
+    });
+});
 // // loading all the products to application
 // app.get("/products", async (req, res) => {
 //     console.log("products from mongoDB can be used now");
