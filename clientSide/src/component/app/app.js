@@ -46,6 +46,7 @@ function App(props) {
   let userRange = (value) => {
     setRange(value);
   }
+  // console.log("userSearch:", userSearch);
   console.log("userSearch:", userSearch);
 
   document.cookie = "isLogIn=1";
