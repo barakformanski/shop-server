@@ -58,7 +58,7 @@ io.on("connection", (socket) => {
 app.use(cors());
 
 app.use(express.static(path.join(__dirname, 'client/build')));
-const PREFIX = "/api";
+
 
 app.use(
     morgan(
@@ -167,8 +167,7 @@ connectToDB().then(async (res) => {
 
 // cheking git
 
-// app.post('/userCart', async (req, res) => {
-app.post(`/${PREFIX}userCart`, async (req, res) => {
+app.post('/userCart', async (req, res) => {
 
     const { name, password, email, productTitle } = req.body;
     let user = await User.findOne({
