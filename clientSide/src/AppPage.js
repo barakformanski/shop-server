@@ -11,6 +11,7 @@ import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 
 const AppPage = () => {
   // const { id } = useParams();
+  console.log("testing git");
 
   return (
     <Router>
