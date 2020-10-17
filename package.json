@@ -1,6 +1,9 @@
 {
   "name": "nodejs",
   "version": "1.0.0",
+  "engines": {
+    "node": "12.x"
+  },
   "main": "app.js",
   "dependencies": {
     "body-parser": "^1.19.0",
@@ -21,7 +24,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node serverProducts.js",
     "start-dev": "nodemon serverProducts.js",
-    "heroku-postbuild": "cd clientSide @@ npm i && nom run build"
+    "heroku-postbuild": "cd clientSide @@ npm i && npm run build"
   },
   "keywords": [],
   "author": "",
