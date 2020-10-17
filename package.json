@@ -24,7 +24,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node serverProducts.js",
     "start-dev": "nodemon serverProducts.js",
-    "heroku-postbuild": "cd clientSide @@ npm i && npm run build"
+    "heroku-postbuild": "cd clientSide && npm i && npm run build"
   },
   "keywords": [],
   "author": "",
