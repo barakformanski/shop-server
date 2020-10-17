@@ -57,6 +57,7 @@ io.on("connection", (socket) => {
 
 app.use(cors());
 
+app.use(express.static(path.join(__dirname, 'clientSide/build')));
 
 
 app.use(
