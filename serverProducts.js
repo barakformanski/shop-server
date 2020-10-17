@@ -167,7 +167,7 @@ connectToDB().then(async (res) => {
 
 // cheking git
 
-app.post('/userCart', async (req, res) => {
+// app.post('/userCart', async (req, res) => {
 app.post(`/${PREFIX}userCart`, async (req, res) => {
 
     const { name, password, email, productTitle } = req.body;
