@@ -124,8 +124,15 @@ function connectToDB() {
 }
 
 
-connectToDB().then(async (res) => {
-    console.log("connected to DB");
+// connectToDB().then(async (res) => {
+connectToDB().then( (res) => {
+    console.log("connected to DB!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11");
+
+    // const Productdata =  Product.find().exec();
+    // console.log("Productdata:", Productdata);
+
+
+});
 
     // module.exports = { User, Product, Cart, ProductInCart }
 
@@ -142,9 +149,6 @@ connectToDB().then(async (res) => {
     //     });
     // userExample.save();
     // console.log("userExample:", userExample);
-    const Productdata = await Product.find().exec();
-    console.log("Productdata:", Productdata);
-
 
     // app.post('/userCart', async (req, res) => {
     //     console.log("req:", req.body);
@@ -163,9 +167,6 @@ connectToDB().then(async (res) => {
 
     // });
 
-
-
-});
 
 // cheking git
 
