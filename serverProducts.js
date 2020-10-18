@@ -113,7 +113,8 @@ const Cart = mongoose.model("Cart", CartSchema);
 const ProductInCart = mongoose.model("ProductInCart", ProductInCartScehma);
 
 function connectToDB() {
-    return mongoose.connect('mongodb://localhost/shop',
+    return mongoose.connect('mongodb://localhost/shop', 
+    // return mongoose.connect(`mongodb+srv://shop-forever:${process.env.DB_PASS}@shop-forever.b4cza.mongodb.net/<dbname>?retryWrites=true&w=majority`,
         {
             useNewUrlParser: true,
             useCreateIndex: true,
@@ -123,15 +124,21 @@ function connectToDB() {
 }
 
 
-connectToDB().then(async (res) => {
-    console.log("connected to DB");
+// connectToDB().then(async (res) => {
+//     console.log("connected to DB");
 
+//     const Productdata = await Product.find().exec();
+//     console.log("Productdata:", Productdata);
+
+// });
+
+    
     // module.exports = { User, Product, Cart, ProductInCart }
 
-    const exampleUser = new User({
-        name: "fake user",
-        cart: [{ product: "fake product", quantity: 10, cash: 10 }]
-    });
+    // const exampleUser = new User({
+    //     name: "fake user",
+    //     cart: [{ product: "fake product", quantity: 10, cash: 10 }]
+    // });
 
     // const userExample = await User
     //     .findOne({ _id: "5f79a3dffcec3c143c2b2d1c" })
@@ -141,10 +148,6 @@ connectToDB().then(async (res) => {
     //     });
     // userExample.save();
     // console.log("userExample:", userExample);
-    const Productdata = await Product.find().exec();
-    console.log("Productdata:", Productdata);
-
-
     // app.post('/userCart', async (req, res) => {
     //     console.log("req:", req.body);
     //     const userCart = await new User(req.body);
@@ -164,7 +167,6 @@ connectToDB().then(async (res) => {
 
 
 
-});
 
 // cheking git
 
@@ -376,8 +378,11 @@ app.put(`${PREFIX}/update_product/:id`, async (req, res) => {
     ;
 
 connectToDB().then(() => {
-    server.listen(PORT, () => {
+    server.listen(PORT,async () => {
+        console.log("connected to DB");
 
+        const Productdata = await Product.find().exec();
+        console.log("Productdata:", Productdata);
         console.log("app is listening on port:", PORT, "   and connected to Mongo DB")
     });
 });
