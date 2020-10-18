@@ -38,7 +38,7 @@ const validateMessages = {
 };
 
 const AdminPage = (props) => {
-    const { products, setProducts, newProduct, deletedProduct } = useContext(Context);
+    const { PREFIX,products, setProducts, newProduct, deletedProduct } = useContext(Context);
 
     const [productTitle, setProductTitle] = useState('');
     const fileInput = useRef();
@@ -47,14 +47,14 @@ const AdminPage = (props) => {
     const uploadImage = async () => {
 
         const uploadedFile = fileInput.current;
-        axios.post("http://localhost:5000/uploadNewProductImage", uploadedFile.files[0], {
+        axios.post(`http://localhost:5000${PREFIX}/uploadNewProductImage`, uploadedFile.files[0], {
             params: { filename: uploadedFile.files[0].name },
             onUploadProgress: (progressEvent) => {
                 const percentCompleted = Math.round(
                     (progressEvent.loaded * 100) / progressEvent.total
                 );
                 console.log("percentCompleted:", percentCompleted);
-                setNewProductImage("http://localhost:5000/images/" + uploadedFile.files[0].name);
+                setNewProductImage(`http://localhost:5000${PREFIX}/images/` + uploadedFile.files[0].name);
             },
         });
         await console.log("newProductImage:", newProductImage);
@@ -76,14 +76,14 @@ const AdminPage = (props) => {
         };
 
         axios
-            .post('http://127.0.0.1:5000/products', newProduct)
+            .post(`http://127.0.0.1:5000${PREFIX}/products`, newProduct)
             .then((res) => {
                 console.log("newProduct:", newProduct)
                 console.log(res);
             });
     }
     useEffect(() => {
-        axios.get(`http://localhost:5000/products`)
+        axios.get(`http://localhost:5000${PREFIX}/products`)
             .then((res) => {
                 const productsarray = res.data;
                 setProducts(productsarray);
@@ -101,7 +101,7 @@ const AdminPage = (props) => {
     }
     function DeleteProduct() {
         axios
-            .delete(`http://127.0.0.1:5000/products/${selectedProductToDelete}`)
+            .delete(`http://127.0.0.1:5000${PREFIX}/products/${selectedProductToDelete}`)
             .then((res) => {
                 alert(`המוצר ${productTitle}, שמספרו המזהה ${selectedProductToDelete} נמחק`);
             });

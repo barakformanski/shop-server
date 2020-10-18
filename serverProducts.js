@@ -125,11 +125,11 @@ function connectToDB() {
 
 
 // connectToDB().then(async (res) => {
-connectToDB().then( (res) => {
-    console.log("connected to DB!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11");
+connectToDB().then(async (res) => {
+    console.log("connected to DB");
 
-    // const Productdata =  Product.find().exec();
-    // console.log("Productdata:", Productdata);
+    const Productdata = await Product.find().exec();
+    console.log("Productdata:", Productdata);
 
 
 });

@@ -7,7 +7,7 @@ import Context from '../../component/Context.js';
 function Login() {
     // const [email, setEmail] = useState("");
     // const [password, setPassword] = useState("");
-    const { PREFIX,email, setEmail, password, setPassword, name, setName, userLogin, setUserLogin } = useContext(Context);
+    const { email, setEmail, password, setPassword, name, setName, userLogin, setUserLogin } = useContext(Context);
 
     function validateForm() {
 
