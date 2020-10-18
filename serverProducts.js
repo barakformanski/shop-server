@@ -124,15 +124,9 @@ function connectToDB() {
 }
 
 
-// connectToDB().then(async (res) => {
-//     console.log("connected to DB");
+connectToDB().then(async (res) => {
+    console.log("connected to DB");
 
-//     const Productdata = await Product.find().exec();
-//     console.log("Productdata:", Productdata);
-
-// });
-
-    
     // module.exports = { User, Product, Cart, ProductInCart }
 
     // const exampleUser = new User({
@@ -148,6 +142,10 @@ function connectToDB() {
     //     });
     // userExample.save();
     // console.log("userExample:", userExample);
+    const Productdata = await Product.find().exec();
+    console.log("Productdata:", Productdata);
+
+
     // app.post('/userCart', async (req, res) => {
     //     console.log("req:", req.body);
     //     const userCart = await new User(req.body);
@@ -167,6 +165,7 @@ function connectToDB() {
 
 
 
+});
 
 // cheking git
 
@@ -378,11 +377,8 @@ app.put(`${PREFIX}/update_product/:id`, async (req, res) => {
     ;
 
 connectToDB().then(() => {
-    server.listen(PORT,async () => {
-        console.log("connected to DB");
+    server.listen(PORT, () => {
 
-        const Productdata = await Product.find().exec();
-        console.log("Productdata:", Productdata);
         console.log("app is listening on port:", PORT, "   and connected to Mongo DB")
     });
 });
