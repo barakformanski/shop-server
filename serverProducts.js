@@ -13,7 +13,8 @@ const cors = require("cors");
 const dotenv = require('dotenv');
 dotenv.config();
 const PORT = process.env.PORT ? process.env.PORT : 8000;
-console.log("PORT:", process.env.PORT);
+const url = process.env.MONGO_URI || 'mongodb://localhost:27017';
+
 app.use(bodyParser.json());
 const path = require("path");
 const accesLogStream = fs.createWriteStream(
@@ -113,8 +114,8 @@ const Cart = mongoose.model("Cart", CartSchema);
 const ProductInCart = mongoose.model("ProductInCart", ProductInCartScehma);
 
 function connectToDB() {
-    return mongoose.connect('mongodb://localhost/shop', 
-    // return mongoose.connect(`mongodb+srv://shop-forever:${process.env.DB_PASS}@shop-forever.b4cza.mongodb.net/<dbname>?retryWrites=true&w=majority`,
+    // return mongoose.connect('mongodb://localhost/shop', 
+    return mongoose.connect(`${process.env.MONGO_URI}`,
         {
             useNewUrlParser: true,
             useCreateIndex: true,
