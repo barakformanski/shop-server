@@ -376,9 +376,9 @@ app.put(`${PREFIX}/update_product/:id`, async (req, res) => {
     ;
 
 connectToDB().then(() => {
-    server.listen(process.env.PORT, () => {
+    server.listen(PORT, () => {
 
-        console.log("app is listening on port:", process.env.PORT, "   and connected to Mongo DB")
+        console.log("app is listening on port:", PORT, "   and connected to Mongo DB")
     });
 });
 // // loading all the products to application

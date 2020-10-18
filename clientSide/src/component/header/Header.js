@@ -34,7 +34,7 @@ function Header() {
     return (
         <div className="header">
             <div className="header_text">welcome to the our digital shop!
-              <Link to={`${PREFIX}/adminLogIn`}>
+              <Link to={`/adminLogIn`}>
                     <button className="login_button">admin acces</button>
                     {/* <Login /> */}
                 </Link>
