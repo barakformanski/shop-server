@@ -93,7 +93,7 @@ const Product = (props) => {
   )
   return (
     <div>
-      <Link to={`${PREFIX}/${props.id}`}>
+      <Link to={`/${props.id}`}>
         <div>{props.title}</div>
         <div>ש"ח {props.price}</div>
 

@@ -193,15 +193,15 @@ function App(props) {
           <Search />
           <Switch>
 
-            <Route exact path={`${PREFIX}/adminLogIn`}>
+            <Route exact path={`/adminLogIn`}>
               <AdminPage />
             </Route>
 
-            <Route exact path={`${PREFIX}/Login`}>
+            <Route exact path={`/Login`}>
               <Login />
             </Route>
 
-            <Route exact path={`${PREFIX}`}>
+            <Route exact path={`/`}>
 
               <Slider range defaultValue={[0, 100]} onChange={userRange} />
               <Products
@@ -219,7 +219,7 @@ function App(props) {
               </div>
             </Route>
 
-            <Route path="${PREFIX}/:id">
+            <Route path={`/:id`}>
               <ProductPage />
             </Route>
 
