@@ -54,7 +54,7 @@ function Login() {
                         type="password"
                     />
                 </FormGroup>
-                <Link to={`${PREFIX}/`}>
+                <Link to={`/`}>
 
                     <Button block bsSize="large" disabled={!validateForm()} type="submit" onClick={changeName}>
                         Login

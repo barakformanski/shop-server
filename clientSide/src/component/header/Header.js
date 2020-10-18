@@ -38,7 +38,7 @@ function Header() {
                     <button className="login_button">admin acces</button>
                     {/* <Login /> */}
                 </Link>
-                <Link to={`${PREFIX}/Login`}>
+                <Link to={`/Login`}>
                     <button className="Customer_login_button">{buttonText}</button>
                 </Link>
             </div >
