@@ -72,7 +72,8 @@ const Products = (props) => {
 
 
   useEffect(() => {
-    const socket = socketIOClient(`http://localhost:5000${PREFIX}`);
+    // const socket = socketIOClient(`http://localhost:5000${PREFIX}`);
+    const socket = socketIOClient(`http://localhost:5000`);
     socket.on("product_updated", (data) => {
       console.log('data product to update:', data);
       console.log("id to update:", data.id);

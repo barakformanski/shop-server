@@ -48,13 +48,15 @@ const AdminPage = (props) => {
 
         const uploadedFile = fileInput.current;
         axios.post(`http://localhost:5000${PREFIX}/uploadNewProductImage`, uploadedFile.files[0], {
+        // axios.post(`http://localhost:5000/uploadNewProductImage`, uploadedFile.files[0], {
             params: { filename: uploadedFile.files[0].name },
             onUploadProgress: (progressEvent) => {
                 const percentCompleted = Math.round(
                     (progressEvent.loaded * 100) / progressEvent.total
                 );
                 console.log("percentCompleted:", percentCompleted);
-                setNewProductImage(`http://localhost:5000${PREFIX}/images/` + uploadedFile.files[0].name);
+                setNewProductImage(`http://localhost:5000/images/` + uploadedFile.files[0].name);
+                // setNewProductImage(`http://localhost:5000${PREFIX}/images/` + uploadedFile.files[0].name);
             },
         });
         await console.log("newProductImage:", newProductImage);
