@@ -9,7 +9,7 @@ import Context from '../Context';
 
 
 function Header() {
-    const { name, userLogin } = useContext(Context);
+    const { PREFIX,name, userLogin } = useContext(Context);
     const [buttonText, setButtonText] = useState("הזדהה כלקוח");
 
 
@@ -34,11 +34,11 @@ function Header() {
     return (
         <div className="header">
             <div className="header_text">welcome to the our digital shop!
-              <Link to="/adminLogIn">
+              <Link to={`${PREFIX}/adminLogIn`}>
                     <button className="login_button">admin acces</button>
                     {/* <Login /> */}
                 </Link>
-                <Link to="/Login">
+                <Link to={`${PREFIX}/Login`}>
                     <button className="Customer_login_button">{buttonText}</button>
                 </Link>
             </div >

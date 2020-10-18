@@ -25,6 +25,7 @@ import { Provider } from '../Context.js'
 
 
 function App(props) {
+  const PREFIX = "/api";
   const [productsFromDB, setProductsFromDB] = useState([]);
   const [products, setProducts] = useState([]);
   const [cartCount, setCartCount] = useState(0);
@@ -56,6 +57,7 @@ function App(props) {
 
 
   const shopContext = {
+    PREFIX: PREFIX,
     productsFromDB: productsFromDB,
     products: products,
     setProducts: (value) => setProducts(value),
@@ -125,7 +127,7 @@ function App(props) {
   async function getProductsList() {
     let data;
     try {
-      ({ data } = await axios.get("http://localhost:5000/products"));
+      ({ data } = await axios.get(`http://localhost:5000${PREFIX}/products`));
     } catch (e) {
       data = loadProducts();
     }
@@ -147,7 +149,7 @@ function App(props) {
   }
 
   useEffect(() => {
-    const socket = socketIOClient("http://localhost:5000");
+    const socket = socketIOClient(`http://localhost:5000${PREFIX}`);
     socket.on("product_deleted", (data) => {
       setDeletedProduct(data);
       // setProducts(updatedProducts);
@@ -159,7 +161,7 @@ function App(props) {
 
   // new product added- update products DB and client with socket io
   useEffect(() => {
-    const socket = socketIOClient("http://localhost:5000");
+    const socket = socketIOClient(`http://localhost:5000${PREFIX}`);
     socket.on("product_added", (data) => {
       setNewProduct(data);
 
@@ -191,15 +193,15 @@ function App(props) {
           <Search />
           <Switch>
 
-            <Route exact path="/adminLogIn">
+            <Route exact path={`${PREFIX}/adminLogIn`}>
               <AdminPage />
             </Route>
 
-            <Route exact path="/Login">
+            <Route exact path={`${PREFIX}/Login`}>
               <Login />
             </Route>
 
-            <Route exact path="/">
+            <Route exact path={`${PREFIX}`}>
 
               <Slider range defaultValue={[0, 100]} onChange={userRange} />
               <Products
@@ -217,7 +219,7 @@ function App(props) {
               </div>
             </Route>
 
-            <Route path="/:id">
+            <Route path="${PREFIX}/:id">
               <ProductPage />
             </Route>
 

@@ -18,11 +18,11 @@ const AppPage = () => {
         <Header />
         <Products />
         <Switch>
-          <Route exact path="/">
+          <Route exact path={`${PREFIX}/`}>
             <Products />
           </Route>{" "}
           */
-          <Route path="/product/:id">
+          <Route path={`${PREFIX}/product/:id`}>
             <Product />
           </Route>{" "}
           */

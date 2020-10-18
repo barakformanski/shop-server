@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 // const Routes = require('./Routes');
 const mongoose = require('mongoose');
 // const Product = require('./DBSchema/DBConfig');
+const PREFIX = "/api";
 
 const cors = require("cors");
 const dotenv = require('dotenv');
@@ -167,7 +168,7 @@ connectToDB().then(async (res) => {
 
 // cheking git
 
-app.post('/userCart', async (req, res) => {
+app.post(`${PREFIX}/userCart`, async (req, res) => {
 
     const { name, password, email, productTitle } = req.body;
     let user = await User.findOne({
@@ -247,7 +248,7 @@ app.post('/userCart', async (req, res) => {
 
 
 
-app.post("/login", (req, res) => {
+app.post(`${PREFIX}/login`, (req, res) => {
     const { email, pass } = req.body;
     if (email === process.env.ADMIN_EMAIL && pass === process.env.ADMIN_PASS) {
 
@@ -255,13 +256,13 @@ app.post("/login", (req, res) => {
 
 })
 
-app.post("/upload", (req, res) => {
+app.post(`${PREFIX}/upload`, (req, res) => {
     const userImage = req.pipe(fs.createWriteStream(`src/images/${req.query.filename}`));
     console.log("userImage:", userImage);
     res.send("your image recived sucssesfuly")
 
 })
-app.post("/uploadNewProductImage", (req, res) => {
+app.post(`${PREFIX}/uploadNewProductImage`, (req, res) => {
     const userImage = req.pipe(fs.createWriteStream(`src/images/${req.query.filename}`));
     console.log("userImage:", userImage);
     res.send("your image recived sucssesfuly")
@@ -273,7 +274,7 @@ app.post("/uploadNewProductImage", (req, res) => {
 
 
 
-app.get("/products", async (req, res) => {
+app.get(`${PREFIX}/products`, async (req, res) => {
     console.log("QUERY:", req.query);
     const userSearch = req.query.search;
     console.log("userSearch:", userSearch);
@@ -303,7 +304,7 @@ app.get("/products", async (req, res) => {
     };
 })
 
-app.post('/products', async (req, res) => {
+app.post(`${PREFIX}/products`, async (req, res) => {
     const product = new Product(req.body);
 
     try {
@@ -319,7 +320,7 @@ app.post('/products', async (req, res) => {
 
 
 
-app.delete('/products/:id', async (req, res) => {
+app.delete(`${PREFIX}/products/:id`, async (req, res) => {
     try {
         const product = await Product.findByIdAndDelete(req.params.id)
 
@@ -353,7 +354,7 @@ app.delete('/products/:id', async (req, res) => {
 // });
 
 
-app.put('/update_product/:id', async (req, res) => {
+app.put(`${PREFIX}/update_product/:id`, async (req, res) => {
     try {
         mongoose.set('useFindAndModify', false);
         await Product.findByIdAndUpdate(req.params.id, req.body)

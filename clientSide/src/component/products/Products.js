@@ -15,7 +15,7 @@ import Context from '../Context';
 
 const Products = (props) => {
   const {
-    products, setProducts, userSearch, deletedProduct, itemsInCart, setItemsInCart,
+   PREFIX, products, setProducts, userSearch, deletedProduct, itemsInCart, setItemsInCart,
     newProduct, setNewProduct, name, email, password
   } = useContext(Context);
 
@@ -30,7 +30,7 @@ const Products = (props) => {
 
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/products`)
+    axios.get(`http://localhost:5000${PREFIX}/products`)
       .then((res) => {
         const productsarray = res.data;
         setProducts(productsarray);
@@ -40,7 +40,7 @@ const Products = (props) => {
 
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/products`)
+    axios.get(`http://localhost:5000${PREFIX}/products`)
       .then((res) => {
         const productsarray = res.data;
         setProducts(productsarray);
@@ -53,7 +53,7 @@ const Products = (props) => {
 
   // search
   useEffect(() => {
-    axios.get(`http://localhost:5000/products/?search=${userSearch}`)
+    axios.get(`http://localhost:5000${PREFIX}/products/?search=${userSearch}`)
 
       .then((res) => {
         console.log(res);
@@ -72,7 +72,7 @@ const Products = (props) => {
 
 
   useEffect(() => {
-    const socket = socketIOClient("http://localhost:5000");
+    const socket = socketIOClient(`http://localhost:5000${PREFIX}`);
     socket.on("product_updated", (data) => {
       console.log('data product to update:', data);
       console.log("id to update:", data.id);

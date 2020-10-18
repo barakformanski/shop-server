@@ -11,7 +11,7 @@ const Product = (props) => {
   const [checkIfClicked, setCheckIfClicked] = useState(true);
   const [quantityInCart, setQuantityInCart] = useState(0);
   const {
-    cartCount, setCartCount, itemsInCart, setItemsInCart, name, email, password, cartId, setCartId, userLogin
+    PREFIX,cartCount, setCartCount, itemsInCart, setItemsInCart, name, email, password, cartId, setCartId, userLogin
   } = useContext(Context);
 
   const userAndProduct = {
@@ -26,7 +26,7 @@ const Product = (props) => {
     if (userLogin) {
 
       console.log("user details arrived:", name, email, password, cartId);
-      axios.post("http://localhost:5000/userCart", userAndProduct).then((res) => {
+      axios.post(`http://localhost:5000${PREFIX}/userCart`, userAndProduct).then((res) => {
         console.log("responsed arrived");
         console.log("res: cartId:", res.data);
         // console.log("res.data:", res.data);
@@ -93,7 +93,7 @@ const Product = (props) => {
   )
   return (
     <div>
-      <Link to={`${props.id}`}>
+      <Link to={`${PREFIX}/${props.id}`}>
         <div>{props.title}</div>
         <div>ש"ח {props.price}</div>
 

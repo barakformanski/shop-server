@@ -7,7 +7,7 @@ import Context from '../../component/Context.js';
 function Login() {
     // const [email, setEmail] = useState("");
     // const [password, setPassword] = useState("");
-    const { email, setEmail, password, setPassword, name, setName, userLogin, setUserLogin } = useContext(Context);
+    const { PREFIX,email, setEmail, password, setPassword, name, setName, userLogin, setUserLogin } = useContext(Context);
 
     function validateForm() {
 
@@ -54,7 +54,7 @@ function Login() {
                         type="password"
                     />
                 </FormGroup>
-                <Link to="/">
+                <Link to={`${PREFIX}/`}>
 
                     <Button block bsSize="large" disabled={!validateForm()} type="submit" onClick={changeName}>
                         Login
