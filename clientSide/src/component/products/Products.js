@@ -7,11 +7,7 @@ import axios from "axios";
 import Cart from "../cart/cart.js";
 import createPersistedState from "use-persisted-state";
 import Context from '../Context';
-// import { isElementOfType } from "react-dom/test-utils";
 
-
-// const useCounterStateOnCart = createPersistedState("count");
-// const useProductsState = createPersistedState("products");
 
 const Products = (props) => {
   const {
@@ -19,12 +15,6 @@ const Products = (props) => {
     newProduct, setNewProduct, name, email, password
   } = useContext(Context);
 
-  // const [products, setProducts] = useState([]);
-  // const [useProductsState, setProducts] = useState([]);
-  // מה זה usestate? לחזור!
-  // const [productsInCart, setProductsInCart] = useState([]);
-  // const [userImage, setUserImage] = useState("");
-  const [idProductFromSocketToChange, setidProductFromSocketToChange] = ('');
 
 
 

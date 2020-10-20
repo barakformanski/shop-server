@@ -135,6 +135,47 @@ connectToDB().then(async (res) => {
 
 });
 
+
+app.get(`${PREFIX}/products`, async (req, res) => {
+    console.log("QUERY:", req.query);
+    const userSearch = req.query.search;
+    console.log("userSearch:", userSearch);
+    if (userSearch) {
+        const filterdProducts = await Product.find(
+            { title: { $regex: userSearch, $options: "i" } },
+            (err, filterdProducts) => {
+                if (err) return console.error(err);
+                console.log("filterdProducts:", filterdProducts);
+                console.log("got search");
+                res.send(filterdProducts);
+            });
+    }
+    else {
+        console.log("res:", res);
+        const productsFromDB = await Product.find();
+        console.log("got products");
+        console.log("products from Mongo DB:", productsFromDB);
+
+        try {
+            res.send(productsFromDB);
+        } catch (err) {
+            res.status(500).send(err);
+        }
+    };
+})
+
+app.get(`${PREFIX}/products/:id`, async (req, res) => {
+  
+    const productsFromDB = await Product.find();
+    console.log("got products");
+    console.log("products from Mongo DB:", productsFromDB);
+    try {
+        res.send(productsFromDB);
+    } catch (err) {
+        res.status(500).send(err);
+    }
+});
+
     // module.exports = { User, Product, Cart, ProductInCart }
 
     // const exampleUser = new User({
@@ -277,35 +318,6 @@ app.post(`${PREFIX}/uploadNewProductImage`, (req, res) => {
 
 
 
-app.get(`${PREFIX}/products`, async (req, res) => {
-    console.log("QUERY:", req.query);
-    const userSearch = req.query.search;
-    console.log("userSearch:", userSearch);
-    if (userSearch) {
-        const filterdProducts = await Product.find(
-            { title: { $regex: userSearch, $options: "i" } },
-            (err, filterdProducts) => {
-                if (err) return console.error(err);
-                console.log("filterdProducts:", filterdProducts);
-                console.log("got search");
-                res.send(filterdProducts);
-            });
-    }
-
-
-    else {
-        console.log("res:", res);
-        const productsFromDB = await Product.find();
-        console.log("got products");
-        console.log("products from Mongo DB:", productsFromDB);
-
-        try {
-            res.send(productsFromDB);
-        } catch (err) {
-            res.status(500).send(err);
-        }
-    };
-})
 
 app.post(`${PREFIX}/products`, async (req, res) => {
     const product = new Product(req.body);

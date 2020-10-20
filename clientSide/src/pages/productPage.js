@@ -1,26 +1,30 @@
-import React, { useEffect, useState, useContext } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useContext,useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 import axios from 'axios'
 import Product from '../component/product/product.js'
 import Context from '../../src/component/Context.js';
 
 const ProductPage = (props) => {
-    const [product, setProduct] = useState(null);
+    const {PREFIX } = useContext(Context);
+    let [chosenProduct, setChosenProduct] =useState ('');
+
     const { id } = useParams();
-    console.log(id);
+            
+    useEffect(() => {
+        const url = `http://localhost:5000${PREFIX}/products/${id}`
+        axios.get(url)
+            .then((res) => {
+                console.log(res.data);
+                const products = res.data;
+                const find = products.find((chosenProduct) => chosenProduct._id === id);
+                console.log(find);
+                setChosenProduct(find)
+            })
+        console.log(chosenProduct);
+    }, []);
 
-    const { products } = useContext(Context);
-    console.log(products);
-    // useEffect(() => {
-    //     const url = `http://localhost:5000/products/${id}`
-    //     axios.get(url)
-    //         .then(({ data }) => {
-    //             setProduct(data);
 
-    //         })
-    // }, [])
-
-
+    
     // useEffect(() => {
     //     // const params = { search: search }
     //     axios.get("http://localhost:5000/products", { params: params })
@@ -33,17 +37,22 @@ const ProductPage = (props) => {
     //   }, [search]);
     //   console.log(useProductsState);
     return (
-        product &&
         <div>
-            <h1>{product.title}</h1>
-            <img src={product.image} />
-            <h2>description:</h2>
-            <h2>  {product.description}</h2>
-            <h2>price:{product.price}$</h2>
+        <div>דף מידע</div>
+        {/* { chosen } */}
+       
+        <div>
+            
+         <h1>{chosenProduct.title}</h1>
+            <img src={chosenProduct.image} /> 
+             <h2>,תיאור:</h2>
+             <h2>  {chosenProduct.description}</h2>
+          <h2>מחיר:{chosenProduct.price}ש"ח</h2>  
 
+            <Link to="/">Home</Link>
 
-
-        </div >
+         </div >
+         </div >
     );
 };
 

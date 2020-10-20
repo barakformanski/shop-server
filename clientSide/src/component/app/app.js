@@ -8,7 +8,7 @@ import AdminPage from "../../pages/adminPage/AdminPage.js"
 
 import { Slider } from "antd";
 import Login from "../login/Login.js"
-import { BrowserRouter as Router, Route, Switch, Link, useParams } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import ProductPage from '../../pages/productPage.js'
 import Search from "../search/Search.js"
 import axios from "axios";
@@ -221,7 +221,7 @@ function App(props) {
               </div>
             </Route>
 
-            <Route path={`/:id`}>
+            <Route path={`/products/:id`}>
               <ProductPage />
             </Route>
 

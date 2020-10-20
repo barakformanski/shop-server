@@ -4,7 +4,7 @@ import Context from '../Context';
 import axios from 'axios';
 // import Cart from "../cart/cart";
 // import Products from "../products/Products.js"
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Link } from "react-router-dom";
 
 const Product = (props) => {
   const [quantity, setquantity] = useState(props.quantity);
@@ -93,7 +93,7 @@ const Product = (props) => {
   )
   return (
     <div>
-      <Link to={`/${props.id}`}>
+      <Link to={`/products/${props.id}`}>
         <div>{props.title}</div>
         <div>ש"ח {props.price}</div>
 
