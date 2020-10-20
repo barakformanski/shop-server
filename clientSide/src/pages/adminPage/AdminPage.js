@@ -111,7 +111,7 @@ const AdminPage = (props) => {
 
     return (
         <div className="adminPage" dir="rtl">
-            <Link to="/.">
+            <Link to="/">
                 <button className="Home_button">חזור לדף הבית</button>
 
             </Link>

@@ -115,7 +115,7 @@ const ProductInCart = mongoose.model("ProductInCart", ProductInCartScehma);
 
 function connectToDB() {
     // return mongoose.connect('mongodb://localhost/shop', 
-    return mongoose.connect(`${process.env.MONGO_URI}`,
+    return mongoose.connect(`${url}`,
         {
             useNewUrlParser: true,
             useCreateIndex: true,
@@ -390,12 +390,12 @@ app.put(`${PREFIX}/update_product/:id`, async (req, res) => {
 })// app.use('/', Routes);
     ;
 
-connectToDB().then(() => {
+// connectToDB().then(() => {
     server.listen(PORT, () => {
 
         console.log("app is listening on port:", PORT, "   and connected to Mongo DB")
     });
-});
+// });
 // // loading all the products to application
 // app.get("/products", async (req, res) => {
 //     console.log("products from mongoDB can be used now");

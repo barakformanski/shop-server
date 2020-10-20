@@ -45,7 +45,7 @@ const ProductPage = (props) => {
             
          <h1>{chosenProduct.title}</h1>
             <img src={chosenProduct.image} /> 
-             <h2>,תיאור:</h2>
+             <h2>תיאור:</h2>
              <h2>  {chosenProduct.description}</h2>
           <h2>מחיר:{chosenProduct.price}ש"ח</h2>  
 
