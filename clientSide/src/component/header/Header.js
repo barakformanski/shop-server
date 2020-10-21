@@ -35,7 +35,7 @@ function Header() {
         <div className="header">
             <div className="header_text">welcome to the our digital shop!
               <Link to={`/adminLogIn`}>
-                    <button className="login_button">admin acces</button>
+                    <button className="login_button">כניסת מנהל</button>
                     {/* <Login /> */}
                 </Link>
                 <Link to={`/Login`}>

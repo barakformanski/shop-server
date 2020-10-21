@@ -125,16 +125,26 @@ function connectToDB() {
 }
 
 
-// connectToDB().then(async (res) => {
-connectToDB().then(async (res) => {
-    console.log("connected to DB");
+connectToDB().then(() => {
+    server.listen(PORT, () => {
 
-    const Productdata = await Product.find().exec();
-    console.log("Productdata:", Productdata);
-
-
+        console.log("app is listening on port:", PORT, "   and connected to Mongo DB")
+    });
 });
+// connectToDB().then(async (res) => {
+// connectToDB().then(async (res) => {
+//     console.log("connected to DB");
 
+//     const Productdata = await Product.find().exec();
+//     console.log("Productdata:", Productdata);
+
+
+// });
+
+// להשמיש!!!!
+// app.get("*", (req, res) => {
+//     res.sendFile(__dirname + "/clientSide/build/index.html");
+//   });
 
 app.get(`${PREFIX}/products`, async (req, res) => {
     console.log("QUERY:", req.query);
@@ -390,12 +400,6 @@ app.put(`${PREFIX}/update_product/:id`, async (req, res) => {
 })// app.use('/', Routes);
     ;
 
-connectToDB().then(() => {
-    server.listen(PORT, () => {
-
-        console.log("app is listening on port:", PORT, "   and connected to Mongo DB")
-    });
-});
 // // loading all the products to application
 // app.get("/products", async (req, res) => {
 //     console.log("products from mongoDB can be used now");
