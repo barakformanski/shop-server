@@ -19,13 +19,7 @@ function Header() {
             setButtonText("הזדהה כלקוח");
         }
         else if (userLogin) {
-            if (name) {
-                setButtonText(name);
-            }
-            else {
-                setButtonText("לקוח לא מילא שם")
-            }
-
+                setButtonText("  ברוך הבא"+ name);
         }
     }, [userLogin])
 
@@ -33,7 +27,7 @@ function Header() {
 
     return (
         <div className="header">
-            <div className="header_text">welcome to the our digital shop!
+            <div className="header_text">!ברוכים הבאים לחנות האינטרנטית שלנו
               <Link to={`/adminLogIn`}>
                     <button className="login_button">כניסת מנהל</button>
                     {/* <Login /> */}

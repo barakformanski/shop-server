@@ -5,13 +5,13 @@ import { Link } from "react-router-dom";
 import Context from '../../component/Context.js';
 
 function Login() {
-    // const [email, setEmail] = useState("");
-    // const [password, setPassword] = useState("");
+   
     const { email, setEmail, password, setPassword, name, setName, userLogin, setUserLogin } = useContext(Context);
 
     function validateForm() {
 
-        return email.length > 0 && password.length > 0;
+        return email.length > 0 && password.length > 0 ;
+        // return email.length > 0 && password.length > 0 && name.length > 0;
 
     }
 
@@ -29,7 +29,7 @@ function Login() {
         <div className="Login">
             <form onSubmit={handleSubmit}>
                 <FormGroup controlId="name" bsSize="large">
-                    <ControlLabel>Name</ControlLabel>
+                    <ControlLabel>שם</ControlLabel>
                     <FormControl
                         autoFocus
                         type="string"
@@ -38,7 +38,7 @@ function Login() {
                     />
                 </FormGroup>
                 <FormGroup controlId="email" bsSize="large">
-                    <ControlLabel>Email</ControlLabel>
+                    <ControlLabel>דואר אלקטרוני</ControlLabel>
                     <FormControl
                         autoFocus
                         type="email"
@@ -47,7 +47,7 @@ function Login() {
                     />
                 </FormGroup>
                 <FormGroup controlId="password" bsSize="large">
-                    <ControlLabel>Password</ControlLabel>
+                    <ControlLabel>סיסמא</ControlLabel>
                     <FormControl
                         value={password}
                         onChange={e => setPassword(e.target.value)}

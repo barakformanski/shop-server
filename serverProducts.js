@@ -3,10 +3,7 @@ const fs = require("fs");
 const util = require('util');
 const app = express();
 const bodyParser = require("body-parser");
-// the next line prefer to Routes.js file that i not useing yet
-// const Routes = require('./Routes');
 const mongoose = require('mongoose');
-// const Product = require('./DBSchema/DBConfig');
 const PREFIX = "/api";
 
 const cors = require("cors");

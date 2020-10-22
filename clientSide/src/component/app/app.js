@@ -147,10 +147,12 @@ function App(props) {
     const products = localStorage.getItem("products");
     return products ? JSON.parse(products) : [];
   }
+  // const PORT = process.env.PORT ? process.env.PORT : 5000;
+
+  // const socket = socketIOClient(`http://localhost:5000`);
+  const socket = socketIOClient(`/`);
 
   useEffect(() => {
-    // const socket = socketIOClient(`http://localhost:5000${PREFIX}`);
-    const socket = socketIOClient(`http://localhost:5000`);
     socket.on("product_deleted", (data) => {
       setDeletedProduct(data);
       // setProducts(updatedProducts);
@@ -162,8 +164,7 @@ function App(props) {
 
   // new product added- update products DB and client with socket io
   useEffect(() => {
-    // const socket = socketIOClient(`http://localhost:5000${PREFIX}`);
-    const socket = socketIOClient(`http://localhost:5000`);
+    // const socket = socketIOClient(`http://localhost:5000`);
     socket.on("product_added", (data) => {
       setNewProduct(data);
 
