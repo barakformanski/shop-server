@@ -35,28 +35,28 @@ const { title } = require("process");
 const server = http.createServer(app);
 const io = socketIo(server);
 
-const gatApiAndEmit = (socket) => {
-    const respone = Date.now();
+// const gatApiAndEmit = (socket) => {
+//     const respone = Date.now();
     // Emitting a new messege. will be commited by the client
-    socket.emit("FromApi", respone)
-}
-let interval;
+    // socket.emit("FromApi", respone)
+// }
+// let interval;
 
 io.on("connection", (socket) => {
     console.log("שים לב! לקוח נוסף התחבר");
-    if (interval) {
-        clearInterval(interval);
-    }
-    interval = setInterval(() => gatApiAndEmit(socket), 1000);
+    // if (interval) {
+    //     clearInterval(interval);
+    // }
+    // interval = setInterval(() => gatApiAndEmit(socket), 1000);
     socket.on("disconnect", () => {
         console.log("שים לב! לקוח פלוני סיים התנתק");
-        clearInterval(interval);
+        // clearInterval(interval);
     });
 });
 
 app.use(cors());
 
-app.use(express.static(path.join(__dirname, 'client/build')));
+app.use(express.static(path.join(__dirname, 'clientSide/build')));
 
 
 app.use(

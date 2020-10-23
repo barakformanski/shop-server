@@ -35,6 +35,7 @@ function App(props) {
   const [userSearch, setUserSearch] = useState(null);
   const [productQuantity, setProductQuantity] = useState(props.quantity);
   const [deletedProduct, setDeletedProduct] = useState({});
+  const [productUpdated, setProductUpdated] = useState({});
   const [newProduct, setNewProduct] = useState({});
   const [userImage, setUserImage] = useState(null);
   const [name, setName] = useState('');
@@ -149,28 +150,34 @@ function App(props) {
   }
   // const PORT = process.env.PORT ? process.env.PORT : 5000;
 
-  // const socket = socketIOClient(`http://localhost:5000`);
-  const socket = socketIOClient(`/`);
-
-  useEffect(() => {
-    socket.on("product_deleted", (data) => {
-      setDeletedProduct(data);
-      // setProducts(updatedProducts);
-
-      setTimeout(() => setDeletedProduct({}), 3000);
-    });
-  }, []);
+  const socket = socketIOClient(`http://localhost:5000`);
+  // const socket = socketIOClient(`/`);לשנות לזה אחרי מעבר מוצלח להירוקו
 
 
   // new product added- update products DB and client with socket io
   useEffect(() => {
-    // const socket = socketIOClient(`http://localhost:5000`);
+    const socket = socketIOClient(`http://localhost:5000`);
+
+    socket.on("product_deleted", (data) => {
+      setDeletedProduct(data);
+
+            setTimeout(() => setDeletedProduct({}), 3000);
+    });
+
     socket.on("product_added", (data) => {
       setNewProduct(data);
 
       setTimeout(() => setNewProduct({}), 3000);
     });
+
+    socket.on("product_updated", (data) => {
+       setProductUpdated(data);
+       setTimeout(() => setProductUpdated({}), 3000);
+
+    })
+
   }, [newProduct]);
+
 
   return (
     <Provider value={shopContext}>
@@ -183,7 +190,9 @@ function App(props) {
             {newProduct && newProduct.title &&
               <div>שים לב! מוצר חדש אפשרי לקניה {newProduct.title}</div>}
             {deletedProduct && deletedProduct.title &&
-              <div>כבר לא זמין לקניה{deletedProduct.title}שים לב! המוצר </div>}
+              <div>{deletedProduct.title}   שים לב מוצר כבר לא זמין לקניה      </div>}
+            {productUpdated && productUpdated.title &&
+              <div>{productUpdated.title}  שים לב המוצר הבא התעדכן      </div>}
 
           </div>
 

@@ -61,28 +61,6 @@ const Products = (props) => {
 
 
 
-  useEffect(() => {
-    // const socket = socketIOClient(`http://localhost:5000`);
-    const socket = socketIOClient(`/`);
-    socket.on("product_updated", (data) => {
-      console.log('data product to update:', data);
-      console.log("id to update:", data.id);
-      console.log("new quantity", data.quantity);
-      const updatedProducts = products.slice();
-      // const updatedProducts = [...Products];
-      console.log("updatedProducts array after product updated:", updatedProducts);
-      const productIndex = updatedProducts.findIndex((product) => product.id === data.id);
-      updatedProducts[productIndex].quantity = data.quantity;
-      console.log(updatedProducts);
-      setProducts(updatedProducts);
-    });
-
-    socket.on("product_updated", (data) => {
-      setProducts(data);
-
-    })
-
-  }, []);
   return (
     <div className="products">
 
