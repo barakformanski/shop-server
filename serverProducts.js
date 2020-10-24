@@ -142,7 +142,9 @@ connectToDB().then(() => {
 // app.get("*", (req, res) => {
 //     res.sendFile(__dirname + "/clientSide/build/index.html");
 //   });
-
+app.get("*", (req, res) => {
+  res.sendFile(__dirname + "/clientSide/build/index.html");
+});
 app.get(`${PREFIX}/products`, async (req, res) => {
     console.log("QUERY:", req.query);
     const userSearch = req.query.search;
