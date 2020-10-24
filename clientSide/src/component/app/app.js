@@ -150,13 +150,15 @@ function App(props) {
   }
   // const PORT = process.env.PORT ? process.env.PORT : 5000;
 
-  const socket = socketIOClient(`http://localhost:5000`);
-  // const socket = socketIOClient(`/`);לשנות לזה אחרי מעבר מוצלח להירוקו
+  // const socket = socketIOClient(`http://localhost:5000`);
+  // בשורה למעלה עבור סוקט לוקאלי
+  // בשורה מתחת עבור סוקט להירוקו
+  const socket = socketIOClient(`/`);
 
 
   // new product added- update products DB and client with socket io
   useEffect(() => {
-    const socket = socketIOClient(`http://localhost:5000`);
+    // const socket = socketIOClient(`http://localhost:5000`);
 
     socket.on("product_deleted", (data) => {
       setDeletedProduct(data);
