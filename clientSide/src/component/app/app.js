@@ -153,7 +153,7 @@ function App(props) {
   // const socket = socketIOClient(`http://localhost:5000`);
   // בשורה למעלה עבור סוקט לוקאלי
   // בשורה מתחת עבור סוקט להירוקו
-  const socket = socketIOClient(`/`);
+  const socket = socketIOClient(`/` && `http://localhost:5000`);
 
 
   // new product added- update products DB and client with socket io
@@ -179,8 +179,7 @@ function App(props) {
     })
 
   }, [newProduct]);
-
-
+  
   return (
     <Provider value={shopContext}>
       <Router>
