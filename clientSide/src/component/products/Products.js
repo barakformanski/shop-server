@@ -68,10 +68,10 @@ console.log(products);
 
       {
         products
-          // .filter(
-          //   (product) =>
-          //     product.price >= props.range[0] && product.price <= props.range[1]
-          // )
+          .filter(
+            (product) =>
+              product.price >= props.range[0] && product.price <= props.range[1]
+          )
           .map((product) => (
             <div className="product" >
               <Product
