@@ -2,8 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import "./Product.css";
 import Context from '../Context';
 import axios from 'axios';
-// import Cart from "../cart/cart";
-// import Products from "../products/Products.js"
 import { BrowserRouter as Router, Link } from "react-router-dom";
 
 const Product = (props) => {

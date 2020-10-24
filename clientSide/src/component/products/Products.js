@@ -24,7 +24,8 @@ const Products = (props) => {
       .then((res) => {
         const productsarray = res.data;
         setProducts(productsarray);
-        console.log("costimer details:", name, email, password);
+        console.log(products);
+        console.log("costumer details:", name, email, password);
       });
   }, []);
 
@@ -55,7 +56,7 @@ const Products = (props) => {
       });
   }, [userSearch]);
 
-
+console.log(products);
 
 
 
