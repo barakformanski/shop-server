@@ -50,12 +50,21 @@ function App(props) {
   }
   // console.log("userSearch:", userSearch);
   console.log("userSearch:", userSearch);
-
-  document.cookie = "isLogIn=1";
-  document.cookie = "isLogIn=2";
-  document.cookie = "username=3; expires= sun, 1 aug 2021; path=/login";
-  console.log(document.cookie);
-
+  if (!userLogin) {
+    if (!name) {
+      document.cookie = "isLogIn=לקוח אנונימי"
+    }
+    else { document.cookie = `isLogIn=${name}מתחבר` };
+  }
+  if (userLogin) {
+    document.cookie = `isLogIn=${name}מחובר`
+  };
+  
+  
+  document.cookie = `username=${name}; expires= sun, 1 aug 2021; path=/Login`;
+  document.cookie = `email=${email}; expires= sun, 1 aug 2021; path=/Login`;
+  document.cookie = `password=${password}; expires= sun, 1 aug 2021; path=/Login`;
+  console.log("cookies:",document.cookie);
 
   const shopContext = {
     PREFIX: PREFIX,
@@ -153,7 +162,7 @@ function App(props) {
   // const socket = socketIOClient(`http://localhost:5000`);
   // בשורה למעלה עבור סוקט לוקאלי
   // בשורה מתחת עבור סוקט להירוקו
-  const socket = socketIOClient(`/` && `http://localhost:5000`);
+  const socket = socketIOClient(`/` &&  `http://localhost:5000`);
 
 
   // new product added- update products DB and client with socket io
