@@ -80,7 +80,8 @@ const AdminPage = (props) => {
         };
 
         axios
-            .post(`http://127.0.0.1:5000${PREFIX}/products`, newProduct)
+            // .post(`http://127.0.0.1:5000${PREFIX}/products`, newProduct)
+            .post(`${PREFIX}/products`, newProduct)
             .then((res) => {
                 console.log("newProduct:", newProduct)
                 console.log(res);
@@ -106,7 +107,8 @@ const AdminPage = (props) => {
     }
     function DeleteProduct() {
         axios
-            .delete(`http://127.0.0.1:5000${PREFIX}/products/${selectedProductToDelete}`)
+            // .delete(`http://127.0.0.1:5000${PREFIX}/products/${selectedProductToDelete}`)
+            .delete(`${PREFIX}/products/${selectedProductToDelete}`)
             .then((res) => {
                 alert(`המוצר ${productTitle}, שמספרו המזהה ${selectedProductToDelete} נמחק`);
             });
