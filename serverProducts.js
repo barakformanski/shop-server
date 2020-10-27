@@ -138,10 +138,7 @@ connectToDB().then(() => {
 
 // });
 
-// להשמיש!!!!
-// app.get("*", (req, res) => {
-//     res.sendFile(__dirname + "/clientSide/build/index.html");
-//   });
+
 
 app.get(`${PREFIX}/products`, async (req, res) => {
     console.log("QUERY:", req.query);
@@ -182,6 +179,7 @@ app.get(`${PREFIX}/products/:id`, async (req, res) => {
         res.status(500).send(err);
     }
 });
+console.log(process.env.NODE_ENV );
 
     // module.exports = { User, Product, Cart, ProductInCart }
 
@@ -396,6 +394,20 @@ app.put(`${PREFIX}/update_product/:id`, async (req, res) => {
     }
 })// app.use('/', Routes);
     ;
+
+    // להשמיש!!!!
+app.get("*", (req, res) => {
+    res.sendFile(__dirname + "/clientSide/build/index.html");
+    // const productsFromDB = await Product.find();
+    // console.log("got products");
+    // console.log("products from Mongo DB:", productsFromDB);
+
+    // try {
+    //     res.send(productsFromDB);
+    // } catch (err) {
+    //     res.status(500).send(err);
+    // }
+  });
 
 // // loading all the products to application
 // app.get("/products", async (req, res) => {

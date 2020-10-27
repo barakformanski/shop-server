@@ -13,6 +13,9 @@ function Cart(props) {
   const defultCartImage = '../../images/cart.jpg';
 
   console.log('itemsInCart:', itemsInCart);
+  const initialProducutQuantity = props.quantity;
+  console.log("initialProducutQuantity:", initialProducutQuantity);
+  
   return (
     <div className="cart">
 

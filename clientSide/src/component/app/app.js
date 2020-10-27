@@ -19,10 +19,6 @@ import { Provider } from '../Context.js'
 // i need to relearn the use of this option
 // const useCounterState = createPersistedState("count");
 
-// const Routes = require('../../../../ProductController/Product.Route.js');
-// App.use('/', Routes);
-// app.use(cors());
-
 
 function App(props) {
   const PREFIX = "/api";
@@ -33,7 +29,6 @@ function App(props) {
   const [itemsInCart, setItemsInCart] = useState([]);
   const [count, setCount] = useState('');
   const [userSearch, setUserSearch] = useState(null);
-  const [productQuantity, setProductQuantity] = useState(props.quantity);
   const [deletedProduct, setDeletedProduct] = useState({});
   const [productUpdated, setProductUpdated] = useState({});
   const [newProduct, setNewProduct] = useState({});
@@ -48,24 +43,8 @@ function App(props) {
   let userRange = (value) => {
     setRange(value);
   }
-  // console.log("userSearch:", userSearch);
-  console.log("userSearch:", userSearch);
-  if (!userLogin) {
-    if (!name) {
-      document.cookie = "isLogIn=לקוח אנונימי"
-    }
-    else { document.cookie = `isLogIn=${name}מתחבר` };
-  }
-  if (userLogin) {
-    document.cookie = `isLogIn=${name}מחובר`
-  };
   
   
-  document.cookie = `username=${name}; expires= sun, 1 aug 2021; path=/Login`;
-  document.cookie = `email=${email}; expires= sun, 1 aug 2021; path=/Login`;
-  document.cookie = `password=${password}; expires= sun, 1 aug 2021; path=/Login`;
-  console.log("cookies:",document.cookie);
-
   const shopContext = {
     PREFIX: PREFIX,
     productsFromDB: productsFromDB,
@@ -98,7 +77,6 @@ function App(props) {
     setUserLogin: (value) => setUserLogin(value),
 
   }
-
   // localStorage.setItem("check", JSON.stringify([
   //   {
   //     id: 1,
@@ -162,13 +140,28 @@ function App(props) {
   // const socket = socketIOClient(`http://localhost:5000`);
   // בשורה למעלה עבור סוקט לוקאלי
   // בשורה מתחת עבור סוקט להירוקו
-  const socket = socketIOClient(`/` &&  `http://localhost:5000`);
-
+  // const socket = socketIOClient(`/` &&  `http://localhost:5000`);
+  // const socket = socketIOClient(`http://localhost:5000`);
+  // const [socket, SetSocket] = useState(socketIOClient(`http://localhost:5000`));
+  // const [socket, SetSocket] = useState(socketIOClient(`http://localhost:5000`));
+  
+console.log(process.env.NODE_ENV );
 
   // new product added- update products DB and client with socket io
   useEffect(() => {
     // const socket = socketIOClient(`http://localhost:5000`);
+    let address = '';
+    if (process.env.NODE_ENV === 'development') {
+      
+      address = 'http://localhost:5000';
+      // SetSocket(socketIOClient(`http://localhost:5000`));
 
+    } else if(process.env.NODE_ENV === 'production') {
+      // SetSocket(socketIOClient(`/` ));
+      address = '/';
+
+    }
+    const socket= socketIOClient(address);
     socket.on("product_deleted", (data) => {
       setDeletedProduct(data);
 
@@ -188,7 +181,28 @@ function App(props) {
     })
 
   }, [newProduct]);
+
   
+
+  // עוגיות - כדי לשמור פרטי משתמש
+  // JWTבינתיים לא פונקציונאלי, להמיר שימוש עבור שמירת הלוג אין של המשתמש ולצרף שימוש ב
+  if (!userLogin) {
+    if (!name) {
+      document.cookie = "isLogIn= לקוח אנונימי מחובר"
+    }
+    else { document.cookie = `isLogIn=${name} מתחבר` };
+  }
+  if (userLogin) {
+    document.cookie = `isLogIn=${name} מחובר`
+  };
+  
+  document.cookie = `username=${name}; expires= sun, 1 aug 2021; path=/Login`;
+  document.cookie = `email=${email}; expires= sun, 1 aug 2021; path=/Login`;
+  document.cookie = `password=${password}; expires= sun, 1 aug 2021; path=/Login`;
+  // console.log("cookies:",document.cookie);
+
+
+
   return (
     <Provider value={shopContext}>
       <Router>
@@ -207,7 +221,7 @@ function App(props) {
           </div>
 
           <button className="get_products_button" onClick={getProductsList}>products list</button>
-          <button className="local_storage_button" onClick={() => setCount((currentCount) => currentCount + 1)}>{count}localstorage</button>
+          <button className="local_storage_button" onClick={() => setCount((currentCount) => +currentCount + 1)}>{count}localstorage</button>
 
           {/* now i need to use this option to save on localstorage the users coose of products to bye so he won't loose his chooses from time to time/ i need to use this speacal state option on the buttons that count the bumbers in cartm,for example */}
           <ul id="products"></ul>
