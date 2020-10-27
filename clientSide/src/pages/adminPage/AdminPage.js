@@ -47,7 +47,8 @@ const AdminPage = (props) => {
     const uploadImage = async () => {
 
         const uploadedFile = fileInput.current;
-        axios.post(`http://localhost:5000${PREFIX}/uploadNewProductImage`, uploadedFile.files[0], {
+        // axios.post(`http://localhost:5000${PREFIX}/uploadNewProductImage`, uploadedFile.files[0], {
+        axios.post(`${PREFIX}/uploadNewProductImage`, uploadedFile.files[0], {
         // axios.post(`http://localhost:5000/uploadNewProductImage`, uploadedFile.files[0], {
             params: { filename: uploadedFile.files[0].name },
             onUploadProgress: (progressEvent) => {
@@ -55,7 +56,8 @@ const AdminPage = (props) => {
                     (progressEvent.loaded * 100) / progressEvent.total
                 );
                 console.log("percentCompleted:", percentCompleted);
-                setNewProductImage(`http://localhost:5000/images/` + uploadedFile.files[0].name);
+                // setNewProductImage(`http://localhost:5000/images/` + uploadedFile.files[0].name);
+                setNewProductImage(`/images/` + uploadedFile.files[0].name);
                 // setNewProductImage(`http://localhost:5000${PREFIX}/images/` + uploadedFile.files[0].name);
             },
         });
@@ -85,7 +87,8 @@ const AdminPage = (props) => {
             });
     }
     useEffect(() => {
-        axios.get(`http://localhost:5000${PREFIX}/products`)
+        // axios.get(`http://localhost:5000${PREFIX}/products`)
+        axios.get(`${PREFIX}/products`)
             .then((res) => {
                 const productsarray = res.data;
                 setProducts(productsarray);

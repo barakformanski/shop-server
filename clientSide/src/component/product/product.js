@@ -24,7 +24,8 @@ const Product = (props) => {
     if (userLogin) {
 
       console.log("user details arrived:", name, email, password, cartId);
-      axios.post(`http://localhost:5000${PREFIX}/userCart`, userAndProduct).then((res) => {
+      // axios.post(`http://localhost:5000${PREFIX}/userCart`, userAndProduct).then((res) => {
+      axios.post(`${PREFIX}/userCart`, userAndProduct).then((res) => {
         console.log("responsed arrived");
         console.log("res: cartId:", res.data);
         // console.log("res.data:", res.data);

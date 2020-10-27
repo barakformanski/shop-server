@@ -11,7 +11,8 @@ const ProductPage = (props) => {
     const { id } = useParams();
             
     useEffect(() => {
-        const url = `http://localhost:5000${PREFIX}/products/${id}`
+        // const url = `http://localhost:5000${PREFIX}/products/${id}`
+        const url = `${PREFIX}/products/${id}`
         axios.get(url)
             .then((res) => {
                 console.log(res.data);

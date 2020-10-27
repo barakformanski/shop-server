@@ -20,7 +20,8 @@ const Products = (props) => {
 
 
   useEffect(() => {
-    axios.get(`http://localhost:5000${PREFIX}/products`)
+    axios.get(`${PREFIX}/products`)
+    // axios.get(`http://localhost:5000${PREFIX}/products`)
       .then((res) => {
         const productsarray = res.data;
         setProducts(productsarray);
@@ -31,7 +32,8 @@ const Products = (props) => {
 
 
   useEffect(() => {
-    axios.get(`http://localhost:5000${PREFIX}/products`)
+    // axios.get(`http://localhost:5000${PREFIX}/products`)
+    axios.get(`${PREFIX}/products`)
       .then((res) => {
         const productsarray = res.data;
         setProducts(productsarray);
@@ -44,7 +46,8 @@ const Products = (props) => {
 
   // search
   useEffect(() => {
-    axios.get(`http://localhost:5000${PREFIX}/products/?search=${userSearch}`)
+    // axios.get(`http://localhost:5000${PREFIX}/products/?search=${userSearch}`)
+    axios.get(`${PREFIX}/products/?search=${userSearch}`)
 
       .then((res) => {
         console.log(res);

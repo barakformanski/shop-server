@@ -115,7 +115,8 @@ function App(props) {
   async function getProductsList() {
     let data;
     try {
-      ({ data } = await axios.get(`http://localhost:5000${PREFIX}/products`));
+      // ({ data } = await axios.get(`http://localhost:5000${PREFIX}/products`));
+      ({ data } = await axios.get(`${PREFIX}/products`));
     } catch (e) {
       data = loadProducts();
     }
