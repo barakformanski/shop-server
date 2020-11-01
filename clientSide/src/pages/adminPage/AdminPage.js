@@ -47,6 +47,7 @@ const AdminPage = (props) => {
 
     const [base64, setBase64] = useState('');
     const [newProductImage, setNewProductImage] = useState(null);
+    const [imageUrl, setImageUrl] = useState(null);
 
     async function previewFile () {
         const preview = document.querySelector('img');
@@ -63,31 +64,34 @@ const AdminPage = (props) => {
              
         }
       }
-
     
-    const uploadImage = async () => {
-        console.log(newProductImage);
-        const uploadedFile = fileInput.current;
+    const  uploadImage =  () => {
+        // const uploadedFile = fileInput.current;
                         // console.log(`http://localhost:3000/images/` + uploadedFile.files[0].name);
-
-        axios.post(`${PREFIX}/uploadNewProductImage`, { base64 },
-            uploadedFile.files[0], {
-            params: { filename: uploadedFile.files[0].name},
-            onUploadProgress: (progressEvent) => {
-                const percentCompleted = Math.round(
-                    (progressEvent.loaded * 100) / progressEvent.total
-                );
-                console.log("percentCompleted:", percentCompleted);
-                
-                setNewProductImage(`/images/` + uploadedFile.files[0].name);
-                // setNewProductImage(`http://localhost:5000${PREFIX}/images/` + uploadedFile.files[0].name);
-            },
+        axios.post(`${PREFIX}/uploadNewProductImage`, { base64 })
+            .then((res) => {
+            console.log("res:",res);
+            const url = res.data;
+            setImageUrl(url);
         });
+        //     uploadedFile.files[0], {
+        //     params: { filename: uploadedFile.files[0].name},
+        //     onUploadProgress: (progressEvent) => {
+        //         const percentCompleted = Math.round(
+        //             (progressEvent.loaded * 100) / progressEvent.total
+        //         );
+        //         console.log("percentCompleted:", percentCompleted);
+                
+        //         setNewProductImage(`/images/` + uploadedFile.files[0].name);
+        //         // setNewProductImage(`http://localhost:5000${PREFIX}/images/` + uploadedFile.files[0].name);
+        //     },
+        // }
+        
     
         // console.log(newProductImage.image);
 
-        
     };
+    console.log("imageUrl:",imageUrl);
 
 
 
@@ -99,7 +103,8 @@ const AdminPage = (props) => {
         const newProduct = {
             title: values.product.title,
             // image: newProductImage,
-            image: base64,
+            // image: base64,
+            image: imageUrl,
             price: values.product.price,
             description: values.product.description,
             quantity: values.product.quantity,

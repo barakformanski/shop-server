@@ -109,14 +109,15 @@ const ProductInCartScehma = new mongoose.Schema({
     products: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
     total_cash: Number,
     quantityOnCart: Number,
-})
+});
+
 
 
 const Product = mongoose.model('Product', ProductSchema);
 const User = mongoose.model("User", UserSchema);
 const Cart = mongoose.model("Cart", CartSchema);
 const ProductInCart = mongoose.model("ProductInCart", ProductInCartScehma);
-
+  
 function connectToDB() {
     // return mongoose.connect('mongodb://localhost/shop', 
     return mongoose.connect(`${url}`,
@@ -328,13 +329,13 @@ app.post(`${PREFIX}/uploadNewProductImage`, async (req, res) => {
     // const image = req.body.data;
     // console.log(" req.body:", image);
 
-    cloudinary.uploader.upload(base64, function (error, result) { console.log(result, error) });
+    cloudinary.uploader.upload(base64, function (error, result) {
+        const imageUrl = result.url;
+        console.log(result, error);
+    res.send(imageUrl)
 
+    });
 
-    // cloudinary.v2.uploader.upload("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==", 
-    // function(error, result) {console.log(result, error); });
-
-    res.send("your image recived sucssesfuly")
 
 })
 
