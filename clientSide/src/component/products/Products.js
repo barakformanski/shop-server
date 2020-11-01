@@ -94,7 +94,7 @@ console.log(products);
           ))
       }
 
-      <Cart />
+      {/* <Cart /> */}
 
 
     </div >

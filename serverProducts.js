@@ -3,9 +3,15 @@ const fs = require("fs");
 const util = require('util');
 const app = express();
 const bodyParser = require("body-parser");
+
 const mongoose = require('mongoose');
 const PREFIX = "/api";
-
+var cloudinary = require('cloudinary').v2;
+cloudinary.config({ 
+    cloud_name: 'barak', 
+    api_key: '467589985617896', 
+    api_secret: 'i0ZO2qAtbet5PdhVYBeBToq3chM' 
+  });
 const cors = require("cors");
 const dotenv = require('dotenv');
 dotenv.config();
@@ -42,6 +48,7 @@ const io = socketIo(server);
 // }
 // let interval;
 
+ 
 io.on("connection", (socket) => {
     console.log("שים לב! לקוח נוסף התחבר");
     // if (interval) {
@@ -141,24 +148,24 @@ connectToDB().then(() => {
 
 
 app.get(`${PREFIX}/products`, async (req, res) => {
-    console.log("QUERY:", req.query);
+    // console.log("QUERY:", req.query);
     const userSearch = req.query.search;
-    console.log("userSearch:", userSearch);
+    // console.log("userSearch:", userSearch);
     if (userSearch) {
         const filterdProducts = await Product.find(
             { title: { $regex: userSearch, $options: "i" } },
             (err, filterdProducts) => {
                 if (err) return console.error(err);
-                console.log("filterdProducts:", filterdProducts);
+                // console.log("filterdProducts:", filterdProducts);
                 console.log("got search");
                 res.send(filterdProducts);
             });
     }
     else {
-        console.log("res:", res);
+        // console.log("res:", res);
         const productsFromDB = await Product.find();
         console.log("got products");
-        console.log("products from Mongo DB:", productsFromDB);
+        // console.log("products from Mongo DB:", productsFromDB);
 
         try {
             res.send(productsFromDB);
@@ -172,7 +179,7 @@ app.get(`${PREFIX}/products/:id`, async (req, res) => {
   
     const productsFromDB = await Product.find();
     console.log("got products");
-    console.log("products from Mongo DB:", productsFromDB);
+    // console.log("products from Mongo DB:", productsFromDB);
     try {
         res.send(productsFromDB);
     } catch (err) {
@@ -226,7 +233,7 @@ app.post(`${PREFIX}/userCart`, async (req, res) => {
         email: email,
         productTitle: productTitle
     })
-    console.log("req:", req.body);
+    // console.log("req:", req.body);
 
     if (!user) {
         user = new User(req.body);
@@ -238,8 +245,8 @@ app.post(`${PREFIX}/userCart`, async (req, res) => {
     const userId = user._id;
 
     // try {
-    console.log("user:", user);
-    console.log("userId:", userId);
+    // console.log("user:", user);
+    // console.log("userId:", userId);
 
     if (!cartId) {
         console.log("no cart id, let's create new one:");
@@ -247,7 +254,7 @@ app.post(`${PREFIX}/userCart`, async (req, res) => {
         await newCart.save();
         console.log("newCart:", newCart);
         cartId = newCart._id;
-        console.log("cartId:", cartId);
+        // console.log("cartId:", cartId);
 
         await User.findByIdAndUpdate(
             { _id: userId }, { cartId: [...user.cartId, cartId] },
@@ -264,7 +271,7 @@ app.post(`${PREFIX}/userCart`, async (req, res) => {
     const product = await Product.findOne(
         { title: productTitle }
     ).exec();
-    console.log("product:", product);
+    // console.log("product:", product);
 
     const oldCart = await Cart.findOne({ _id: cartId })
     const productInCart = await ProductInCart.findOne({ cart: cartId })
@@ -311,9 +318,22 @@ app.post(`${PREFIX}/upload`, (req, res) => {
     res.send("your image recived sucssesfuly")
 
 })
-app.post(`${PREFIX}/uploadNewProductImage`, (req, res) => {
-    const userImage = req.pipe(fs.createWriteStream(`src/images/${req.query.filename}`));
-    console.log("userImage:", userImage);
+
+app.post(`${PREFIX}/uploadNewProductImage`, async (req, res) => {
+    // console.log("body:",req.body);
+    const  base64  =  req.body.base64 ;
+    // console.log(base64);
+    // const userImage = req.pipe(fs.createWriteStream(`src/images/${req.query.filename}`));
+    // console.log("userImage:", userImage);
+    // const image = req.body.data;
+    // console.log(" req.body:", image);
+
+    cloudinary.uploader.upload(base64, function (error, result) { console.log(result, error) });
+
+
+    // cloudinary.v2.uploader.upload("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==", 
+    // function(error, result) {console.log(result, error); });
+
     res.send("your image recived sucssesfuly")
 
 })

@@ -146,7 +146,6 @@ function App(props) {
   // const [socket, SetSocket] = useState(socketIOClient(`http://localhost:5000`));
   // const [socket, SetSocket] = useState(socketIOClient(`http://localhost:5000`));
   
-console.log(process.env.NODE_ENV );
 
   // new product added- update products DB and client with socket io
   useEffect(() => {

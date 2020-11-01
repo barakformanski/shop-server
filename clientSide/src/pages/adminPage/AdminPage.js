@@ -8,8 +8,10 @@ import UploadImage from "../../component/uploadComponent/Uploadimage.js";
 import { Link } from "react-router-dom";
 
 import { Form, Input, InputNumber, Button, Upload, Select } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+
+
 const { Option } = Select;
+
 
 const formItemLayout = {
     wrapperCol: {
@@ -17,20 +19,20 @@ const formItemLayout = {
     },
 };
 
-const normFile = (e) => {
+// const normFile = (e) => {
 
-    console.log('Upload event:', e);
+//     console.log('Upload event:', e);
 
-    if (Array.isArray(e)) {
-        console.log("a");
-        return e;
-    }
-    console.log("b");
-    console.log("name:", e.file.name);
+//     if (Array.isArray(e)) {
+//         console.log("a");
+//         return e;
+//     }
+//     console.log("b");
+//     console.log("name:", e.file.name);
 
-    return e && e.fileList;
+//     return e && e.fileList;
 
-};
+// };
 
 
 const validateMessages = {
@@ -42,37 +44,62 @@ const AdminPage = (props) => {
 
     const [productTitle, setProductTitle] = useState('');
     const fileInput = useRef();
-    const [newProductImage, setNewProductImage] = useState('');
 
+    const [base64, setBase64] = useState('');
+    const [newProductImage, setNewProductImage] = useState(null);
+
+    async function previewFile () {
+        const preview = document.querySelector('img');
+        const file = document.querySelector( 'input[type=file]').files[0];
+        const reader = new FileReader();
+        reader.addEventListener("load", async function () {
+            // convert image file to base64 string
+            preview.src = reader.result;
+            setBase64(reader.result);
+          }, false);
+      
+         if (file) {
+             reader.readAsDataURL(file);
+             
+        }
+      }
+
+    
     const uploadImage = async () => {
-
+        console.log(newProductImage);
         const uploadedFile = fileInput.current;
-        // axios.post(`http://localhost:5000${PREFIX}/uploadNewProductImage`, uploadedFile.files[0], {
-        axios.post(`${PREFIX}/uploadNewProductImage`, uploadedFile.files[0], {
-        // axios.post(`http://localhost:5000/uploadNewProductImage`, uploadedFile.files[0], {
-            params: { filename: uploadedFile.files[0].name },
+                        // console.log(`http://localhost:3000/images/` + uploadedFile.files[0].name);
+
+        axios.post(`${PREFIX}/uploadNewProductImage`, { base64 },
+            uploadedFile.files[0], {
+            params: { filename: uploadedFile.files[0].name},
             onUploadProgress: (progressEvent) => {
                 const percentCompleted = Math.round(
                     (progressEvent.loaded * 100) / progressEvent.total
                 );
                 console.log("percentCompleted:", percentCompleted);
-                // setNewProductImage(`http://localhost:5000/images/` + uploadedFile.files[0].name);
+                
                 setNewProductImage(`/images/` + uploadedFile.files[0].name);
                 // setNewProductImage(`http://localhost:5000${PREFIX}/images/` + uploadedFile.files[0].name);
             },
         });
-        await console.log("newProductImage:", newProductImage);
+    
+        // console.log(newProductImage.image);
 
+        
     };
 
 
+
+    
     const onFinish = (values) => {
         console.log("values:", values);
         // console.log(uploadedFile.files[0]);
 
         const newProduct = {
             title: values.product.title,
-            image: newProductImage,
+            // image: newProductImage,
+            image: base64,
             price: values.product.price,
             description: values.product.description,
             quantity: values.product.quantity,
@@ -113,7 +140,7 @@ const AdminPage = (props) => {
                 alert(`המוצר ${productTitle}, שמספרו המזהה ${selectedProductToDelete} נמחק`);
             });
     }
-
+    
     return (
         <div className="adminPage" dir="rtl">
             <Link to="/">
@@ -207,35 +234,12 @@ const AdminPage = (props) => {
                             ]}>
                             <div>
                                 בחר את תמונת המוצר
-                            <input type="file" placeholder="תמונת המוצר" ref={fileInput} />
-
+                            <input type="file" placeholder="תמונת המוצר" ref={fileInput} onChange={previewFile}  />
+                                <img src="" width="10" height="10" alt="לא נתקבלה תמונה"/>
+                                    
                             </div>
                         </Form.Item>
 
-                        {/* 
-                        <Form.Item>
-                            <UploadImage />
-                        </Form.Item> */}
-                        {/* 
-                        <Form.Item
-                            name={["product", "image"]}
-                            rules={[
-                                {
-                                    required: false,
-                                },
-                            ]}
-                            getValueFromEvent={normFile}
-                        >
-
-                            <Upload.Dragger name="files"
-                                action="/upload.do"
-                            >
-                                <p className="ant-upload-drag-icon">
-                                    <UploadOutlined />
-                                </p>
-                                <p className="ant-upload-text">לחץ והוסף קובץ תמונה או גרור את הקובץ ישירות לתיבה זו</p>
-                            </Upload.Dragger>
-                        </Form.Item> */}
 
                         <Form.Item
                             name={["product", "quantity"]}
@@ -254,37 +258,11 @@ const AdminPage = (props) => {
                                 offset: 6,
                             }}
                         >
-                            <Button type="primary" htmlType="submit" onClick={props.addProduct}>
-                                שלח
-          </Button>
+                            <Button type="primary" htmlType="submit" onClick={props.addProduct}>  שלח </Button>
                         </Form.Item>
                     </Form>
-                    <button className="uploadImage" onClick={uploadImage}>העלה את התמונה שבחרת</button>
+                    <button className="uploadImage" onClick={uploadImage}>אשר את התמונה שבחרת</button>
 
-                    {/* <input
-                    className="newProductTitle"
-                    ref={title}
-                    placeholder="שם הפריט "
-                />
-
-                <input
-                    className="newProductQuantity"
-                    ref={quantity}
-                    placeholder="כמות במלאי"
-                />
-                <input
-                    className="newProductPrice"
-                    ref={price}
-                    placeholder="מחיר "
-                />
-                <input
-                    className="newProductDescription"
-                    ref={description}
-                    placeholder="מחיר "
-                />
-                <img
-                    src=""
-                /> */}
 
                 </div>
             </div>
