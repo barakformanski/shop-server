@@ -199,7 +199,7 @@ const AdminPage = (props) => {
                     <Form
                         name="validate_other"
                         {...formItemLayout}
-                        // onFinish={onFinish}
+                        onFinish={onFinish}
                         initialValues={{
                             ['input-number']: 0
                         }}
@@ -250,7 +250,7 @@ const AdminPage = (props) => {
                                 בחר את תמונת המוצר
                             <input type="file" placeholder="תמונת המוצר" ref={fileInput} onChange={previewFile}  />
                                 <img src="" width="10" height="10" alt="עדיין לא נתקבלה תמונה"/>
-                                <button className="uploadImage" onClick={uploadImage}>אשר את התמונה שבחרת</button>
+                                <button type="button" className="uploadImage" onClick={uploadImage}>אשר את התמונה שבחרת</button>
    
                             </div>
                         </Form.Item>
