@@ -18,7 +18,10 @@ dotenv.config();
 const PORT = process.env.PORT ? process.env.PORT : 5000;
 const url = process.env.MONGO_URI || 'mongodb://localhost:27017';
 
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '10mb', extended: true}));
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
+
 const path = require("path");
 const accesLogStream = fs.createWriteStream(
     path.join(__dirname, "access.log"),

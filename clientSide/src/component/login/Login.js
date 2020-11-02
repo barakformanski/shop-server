@@ -3,7 +3,7 @@ import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import "./Login.css";
 import { Link } from "react-router-dom";
 import Context from '../../component/Context.js';
-
+import BetterLogInApp from '../LoginBetterWay/BetterLogInApp.js'
 function Login() {
    
     const { email, setEmail, password, setPassword, name, setName, userLogin, setUserLogin } = useContext(Context);
@@ -27,6 +27,9 @@ function Login() {
 
     return (
         <div className="Login">
+            <div>
+                        <BetterLogInApp />
+                        </div>
             <form onSubmit={handleSubmit}>
                 <FormGroup controlId="name" bsSize="large">
                     <ControlLabel>שם</ControlLabel>

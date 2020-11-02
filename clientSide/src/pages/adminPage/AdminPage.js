@@ -65,10 +65,14 @@ const AdminPage = (props) => {
         }
       }
     
-    const  uploadImage =  () => {
+    const uploadImage = () => {
+        
         // const uploadedFile = fileInput.current;
-                        // console.log(`http://localhost:3000/images/` + uploadedFile.files[0].name);
-        axios.post(`${PREFIX}/uploadNewProductImage`, { base64 })
+        // console.log(`http://localhost:3000/images/` + uploadedFile.files[0].name);
+        axios.post(`${PREFIX}/uploadNewProductImage`, { base64 },
+            
+        )
+    
             .then((res) => {
             console.log("res:",res);
             const url = res.data;
@@ -76,10 +80,11 @@ const AdminPage = (props) => {
         });
         //     uploadedFile.files[0], {
         //     params: { filename: uploadedFile.files[0].name},
-        //     onUploadProgress: (progressEvent) => {
-        //         const percentCompleted = Math.round(
-        //             (progressEvent.loaded * 100) / progressEvent.total
-        //         );
+        // onUploadProgress: (progressEvent) => {
+        //     const percentCompleted = Math.round(
+        //         (progressEvent.loaded * 100) / progressEvent.total
+        //     );
+        
         //         console.log("percentCompleted:", percentCompleted);
                 
         //         setNewProductImage(`/images/` + uploadedFile.files[0].name);
@@ -91,7 +96,6 @@ const AdminPage = (props) => {
         // console.log(newProductImage.image);
 
     };
-    console.log("imageUrl:",imageUrl);
 
 
 
@@ -115,8 +119,8 @@ const AdminPage = (props) => {
             // .post(`http://127.0.0.1:5000${PREFIX}/products`, newProduct)
             .post(`${PREFIX}/products`, newProduct)
             .then((res) => {
-                console.log("newProduct:", newProduct)
-                console.log(res);
+                // console.log("newProduct:", newProduct)
+                // console.log(res);
             });
     }
     useEffect(() => {
@@ -195,7 +199,7 @@ const AdminPage = (props) => {
                     <Form
                         name="validate_other"
                         {...formItemLayout}
-                        onFinish={onFinish}
+                        // onFinish={onFinish}
                         initialValues={{
                             ['input-number']: 0
                         }}
@@ -210,6 +214,7 @@ const AdminPage = (props) => {
                             rules={[
                                 {
                                     required: true,
+                                    message: 'עליך לציין את שם המוצר'
                                 },
                             ]}
                         >
@@ -223,6 +228,8 @@ const AdminPage = (props) => {
                             rules={[
                                 {
                                     required: true,
+                                    message: 'עליך לציין את מחיר המוצר'
+
                                 },
                             ]}
                         >
@@ -235,13 +242,16 @@ const AdminPage = (props) => {
                             rules={[
                                 {
                                     required: true,
+                                    message: 'עליך להוסיף את תמונת המוצר'
+
                                 },
                             ]}>
                             <div>
                                 בחר את תמונת המוצר
                             <input type="file" placeholder="תמונת המוצר" ref={fileInput} onChange={previewFile}  />
-                                <img src="" width="10" height="10" alt="לא נתקבלה תמונה"/>
-                                    
+                                <img src="" width="10" height="10" alt="עדיין לא נתקבלה תמונה"/>
+                                <button className="uploadImage" onClick={uploadImage}>אשר את התמונה שבחרת</button>
+   
                             </div>
                         </Form.Item>
 
@@ -251,6 +261,8 @@ const AdminPage = (props) => {
                             rules={[
                                 {
                                     required: true,
+                                    message: 'עליך להכניס את כמות המוצרים שבמלאי'
+
                                 },
                             ]}
                         >
@@ -266,8 +278,7 @@ const AdminPage = (props) => {
                             <Button type="primary" htmlType="submit" onClick={props.addProduct}>  שלח </Button>
                         </Form.Item>
                     </Form>
-                    <button className="uploadImage" onClick={uploadImage}>אשר את התמונה שבחרת</button>
-
+{/* <div>תמונתך נתקבלה, לחץ "שלח" להשלמת העלאת המוצר</div> */}
 
                 </div>
             </div>
