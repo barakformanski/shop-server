@@ -66,7 +66,7 @@ const AdminPage = (props) => {
       }
     
     const uploadImage = () => {
-        
+        console.log('upload fun started');
         // const uploadedFile = fileInput.current;
         // console.log(`http://localhost:3000/images/` + uploadedFile.files[0].name);
         axios.post(`${PREFIX}/uploadNewProductImage`, { base64 },
