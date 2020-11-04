@@ -24,10 +24,11 @@ function App(props) {
   const PREFIX = "/api";
   const [productsFromDB, setProductsFromDB] = useState([]);
   const [products, setProducts] = useState([]);
-  const [cartCount, setCartCount] = useState(0);
+  const [cartCount, setCartCount] = useState(null);
   const [cartCharge, setCartCharge] = useState(0);
   const [itemsInCart, setItemsInCart] = useState([]);
   const [count, setCount] = useState('');
+  const [quantityInCart, setQuantityInCart] = useState(null);
   const [userSearch, setUserSearch] = useState(null);
   const [deletedProduct, setDeletedProduct] = useState({});
   const [productUpdated, setProductUpdated] = useState({});
@@ -75,6 +76,9 @@ function App(props) {
     setCartId: (value) => setCartId(value),
     userLogin: userLogin,
     setUserLogin: (value) => setUserLogin(value),
+    quantityInCart: quantityInCart,
+    setQuantityInCart: (value)=> setQuantityInCart(value),
+    
 
   }
   // localStorage.setItem("check", JSON.stringify([
@@ -240,13 +244,26 @@ function App(props) {
             <Route exact path={`/`}>
 
               <Slider range defaultValue={[0, 100]} onChange={userRange} />
-              <Products
+             <div  className="productsComponent">
+                <Products
+                  identity="shop"
+                  products={products}
                 range={range}
-
                 userSearch={userSearch}
                 userImage={userImage}
-              />
-              <div style={{ padding: "30px" }}>
+                />
+              </div>
+              <div className="cartComponent">
+                <span>   {cartCount} פריטים בסל  </span>
+                <img alt="עגלת" src="https://static.wixstatic.com/media/63c9e6_4b3dd6fe61aa4548b5882a312746171e~mv2_d_1266_1280_s_2.png/v1/fill/w_350,h_350,al_c,q_85,usm_0.66_1.00_0.01/63c9e6_4b3dd6fe61aa4548b5882a312746171e~mv2_d_1266_1280_s_2.webp"/>
+                <Products
+                  identity="cart"
+                  products={itemsInCart}
+                range={range}
+                userSearch={userSearch}
+                />
+                </div>
+              <div className="notification_new\delete_product" style={{ padding: "30px" }}>
                 {newProduct && newProduct.title &&
                   <div>שים לב! מוצר חדש אפשרי לקניה {newProduct.title}</div>}
                 {deletedProduct && deletedProduct.title &&

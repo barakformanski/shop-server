@@ -11,7 +11,7 @@ import Context from '../Context';
 
 const Products = (props) => {
   const {
-   PREFIX, products, setProducts, userSearch, deletedProduct, itemsInCart, setItemsInCart,
+   PREFIX, products, setProducts, userSearch, deletedProduct, 
     newProduct, setNewProduct, name, email, password
   } = useContext(Context);
 
@@ -41,7 +41,7 @@ const Products = (props) => {
       });
   }, [deletedProduct, newProduct,]);
 
-  console.log("userSearch:", userSearch);
+  // console.log("userSearch:", userSearch);
 
 
   // search
@@ -59,18 +59,18 @@ const Products = (props) => {
       });
   }, [userSearch]);
 
-console.log(products);
+// console.log(products);
 
 
 
 
 
   return (
-    <div className="products">
+    <div className="mapOfProducts">
 
 
       {
-        products
+        props.products
           .filter(
             (product) =>
               product.price >= props.range[0] && product.price <= props.range[1]
@@ -78,16 +78,15 @@ console.log(products);
           .map((product) => (
             <div className="product" >
               <Product
+                identity={props.identity}
                 key={product._id}
                 id={product._id}
                 title={product.title}
                 price={product.price}
                 src={product.image}
-                quantity={product.quantity}
+                quantityInShop={product.quantity}
                 description={product.description}
-                itemsInCart={itemsInCart}
-                setItemsInCart={setItemsInCart}
-
+                quantityInCart={product.quantity}
               />
             </div>
 

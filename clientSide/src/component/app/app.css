@@ -1,8 +1,11 @@
+@import "~antd/dist/antd.css";
+
 .app {
   border-color: green;
   border-style: solid;
   height: 135vh;
   margin: 10px 10px 10px 10px;
+  position: relative;
 }
 .get_products_button{
   position: absolute;
@@ -23,4 +26,26 @@
   right: 109px;
   width: min-content;
 }
-@import "~antd/dist/antd.css";
+
+.productsComponent {
+  border-style: solid;
+  border-color: orange;
+  margin: 10px 10px 10px 10px;
+  height: fit-content;
+  width: 80%;
+  float: left;
+  display: inline-block;
+
+  /* position: absolute; */
+}
+.cartComponent{
+  border-style: solid;
+  border-color: purple;
+  margin: 10px 10px 10px 10px;
+  height: fit-content;
+  width: 20%;
+  display: inline-block;
+
+  /* float: left; */
+  position: absolute;
+}
