@@ -1,9 +1,13 @@
 @import "~antd/dist/antd.css";
+/* 
+html {
+  height: 100%;
+} */
 
 .app {
   border-color: green;
   border-style: solid;
-  height: 135vh;
+  height: auto;
   margin: 10px 10px 10px 10px;
   position: relative;
 }
@@ -33,7 +37,6 @@
   margin: 10px 10px 10px 10px;
   height: fit-content;
   width: 80%;
-  float: left;
   display: inline-block;
 
   /* position: absolute; */

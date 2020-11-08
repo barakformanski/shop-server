@@ -5,7 +5,6 @@ import Header from "./component/header/Header";
 import "./component/products/products.css";
 import Product from "./component/product/product.js";
 import Products from "./component/products/Products.js";
-import Cart from "./component/cart/cart";
 import { Slider } from "antd";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 

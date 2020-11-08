@@ -33,12 +33,17 @@ const Product = (props) => {
       });
     };
 
+console.log(props.id);
     const productIndex = products.findIndex(product => product._id === props.id);
-    
+    console.log(products[productIndex]._id);
+
+   
+
     if (products[productIndex].quantity) {
 
       setCartCount(cartCount + 1)
-      
+      console.log("here");
+
       if (checkIfClicked === true) {
         setItemsInCart(itemsInCart.concat([{ id: props.id, title: props.title, price: props.price, image: props.src, quantity: 1 }]));
         let newProductsArray = [...products];
@@ -50,7 +55,8 @@ const Product = (props) => {
 
 
         
-      } else {
+      }
+       else {
         const productIndex = products.findIndex(product => product._id === props.id);
         const itemsInCartIndex = itemsInCart.findIndex(product => product.id === props.id);
       
@@ -61,7 +67,6 @@ const Product = (props) => {
         let newProductsArray = [...products];
         newProductsArray[productIndex] = { ...newProductsArray[productIndex], quantity: products[productIndex].quantity - 1 };
         setProducts(newProductsArray);
-
 
 
       };
@@ -149,14 +154,18 @@ const Product = (props) => {
           <button onClick={remove_from_cart}>-</button>
         </div>
       ) :
-      <div className="productInCart">
-      <Link to={`/products/${props.id}`}>
+      
+        <div className="productInCart">
+         
+      {/* <Link to={`/products/${props.id}`}> */}
             <div>{props.title}</div>
             <div>כמות בעגלה: {props.quantityInCart}מוצרים</div>
         <div>ש"ח {props.price}סה"כ לתשלום</div>
 
-        <div><img src={props.src} /></div>
-      </Link>
+            <div><img src={props.src} /></div>
+            <button onClick={add_to_cart}>+</button>
+          <button onClick={remove_from_cart}>-</button>
+      {/* </Link> */}
     </div>
       }
       </div>

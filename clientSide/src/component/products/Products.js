@@ -4,7 +4,6 @@ import socketIOClient from "socket.io-client";
 
 import Product from "../product/product.js";
 import axios from "axios";
-import Cart from "../cart/cart.js";
 import createPersistedState from "use-persisted-state";
 import Context from '../Context';
 
@@ -76,7 +75,7 @@ const Products = (props) => {
               product.price >= props.range[0] && product.price <= props.range[1]
           )
           .map((product) => (
-            <div className="product" >
+            // <div className="product" >
               <Product
                 identity={props.identity}
                 key={product._id}
@@ -88,7 +87,7 @@ const Products = (props) => {
                 description={product.description}
                 quantityInCart={product.quantity}
               />
-            </div>
+            // </div>
 
           ))
       }
