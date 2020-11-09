@@ -1,16 +1,15 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, {  useContext } from "react";
 import "./Product.css";
 import Context from '../Context';
 import axios from 'axios';
 import { BrowserRouter as Router, Link } from "react-router-dom";
-import Products from "../products/Products";
 
 const Product = (props) => {
-  const [checkIfClicked, setCheckIfClicked] = useState(true);
-  // const [quantityInShop, setQuantityInShop] = useState(props.quantityInShop);
+
   const {
-    PREFIX,cartCount, setCartCount, products,setProducts,itemsInCart, setItemsInCart, name, email, password, cartId, setCartId, userLogin,quantityInCart, setQuantityInCart
+    PREFIX,cartCount, setCartCount, products,setProducts,itemsInCart, setItemsInCart, name, email, password, cartId, userLogin,
   } = useContext(Context);
+
 
   const userAndProduct = {
     name: name,
@@ -21,6 +20,8 @@ const Product = (props) => {
   }
 
   const add_to_cart = () => {
+    let productIndex = products.findIndex(product => product._id === props.id);
+
     if (userLogin) {
 
       console.log("user details arrived:", name, email, password, cartId);
@@ -28,110 +29,157 @@ const Product = (props) => {
       axios.post(`${PREFIX}/userCart`, userAndProduct).then((res) => {
         console.log("responsed arrived");
         console.log("res: cartId:", res.data);
-        // console.log("res.data:", res.data);
-        // setCartId(res.data);
+
       });
     };
-
-console.log(props.id);
-    const productIndex = products.findIndex(product => product._id === props.id);
-    console.log(products[productIndex]._id);
-
    
+   
+    //  הוספת מוצרים מתוך לחצן המוצרים שבתוך החנות
+    if
+      (props.identity === 'shop') {
+      if (products[productIndex].quantity) {
+        setCartCount(cartCount + 1)
 
-    if (products[productIndex].quantity) {
+          const itemsInCartIndex = itemsInCart.findIndex(item => item._id === props.id);
 
-      setCartCount(cartCount + 1)
-      console.log("here");
+        if (itemsInCartIndex===-1) {
+          setItemsInCart(itemsInCart.concat([{ _id: props.id, title: props.title, price: props.price, image: props.src, quantity: 1 }]));
+          let newProductsArray = [...products];
+          newProductsArray[productIndex] = { ...newProductsArray[productIndex], quantity: props.quantityInShop - 1 };
+          setProducts(newProductsArray);
 
-      if (checkIfClicked === true) {
-        setItemsInCart(itemsInCart.concat([{ id: props.id, title: props.title, price: props.price, image: props.src, quantity: 1 }]));
-        let newProductsArray = [...products];
-        newProductsArray[productIndex] = { ...newProductsArray[productIndex], quantity: products[productIndex].quantity - 1 };
-        setProducts(newProductsArray);
+        }
+        else {
+          const productIndex = products.findIndex(product => product._id === props.id);
+
+          const itemsInCartIndex = itemsInCart.findIndex(item => item._id === props.id);
+
+          let newItemsInCartArray = [...itemsInCart];
+
+          newItemsInCartArray[itemsInCartIndex] = { ...newItemsInCartArray[itemsInCartIndex], quantity: itemsInCart[itemsInCartIndex].quantity + 1 };
+          setItemsInCart(newItemsInCartArray);
+
+          let newProductsArray = [...products];
+          newProductsArray[productIndex] = { ...newProductsArray[productIndex], quantity: products[productIndex].quantity - 1 };
+          setProducts(newProductsArray);
 
 
-        setCheckIfClicked(false);
+        };
 
-
-        
       }
-       else {
-        const productIndex = products.findIndex(product => product._id === props.id);
-        const itemsInCartIndex = itemsInCart.findIndex(product => product.id === props.id);
-      
-        let newItemsInCartArray = [...itemsInCart];
-        newItemsInCartArray[itemsInCartIndex] = { ...newItemsInCartArray[itemsInCartIndex], quantity: itemsInCart[itemsInCartIndex].quantity +1 };
-        setItemsInCart(newItemsInCartArray);
-
-        let newProductsArray = [...products];
-        newProductsArray[productIndex] = { ...newProductsArray[productIndex], quantity: products[productIndex].quantity - 1 };
-        setProducts(newProductsArray);
-
-
-      };
-
+      else {
+        // להוסיף הודעה למנהל שהמוצר אזל
+        alert("מלאי מוצר זה אזל");
+      }
     }
-    else {
-      // להוסיף הודעה למנהל שהמוצר אזל
-      alert("מלאי מוצר זה אזל")
-    }
+
+ // הוספת מוצרים מתוך מוצר שכבר בעגלה
+else if (props.identity === 'cart') {
+
+
+  const itemsInCartIndex = itemsInCart.findIndex(item => item._id === props.id);
+  productIndex = products.findIndex(product => product._id === props.id);
+
+  if (products[productIndex].quantity) {
+  
+    let newItemsInCartArray = [...itemsInCart];
+
+    newItemsInCartArray[itemsInCartIndex] = { ...newItemsInCartArray[itemsInCartIndex], quantity: itemsInCart[itemsInCartIndex].quantity + 1};
+    
+    setItemsInCart(newItemsInCartArray);
+
+    let newProductsArray = [...products];
+    newProductsArray[productIndex] = { ...newProductsArray[productIndex], quantity: products[productIndex].quantity - 1 };
+    setProducts(newProductsArray);
+
+    setCartCount(cartCount + 1)
+
   }
-  // console.log("itemsInCart:",itemsInCart);
+  if (!products[productIndex].quantity) {
+    alert("אזל");
+    // להוסיף הודעה למנהל שהמוצר אזל
+    // alert("מלאי מוצר זה אזל")
+  }
+  // }
+}
+
+
+  }
+
   const remove_from_cart = () => {
-    const itemsInCartIndex = itemsInCart.findIndex(product => product.id === props.id);
+    const itemsInCartIndex = itemsInCart.findIndex(item => item._id === props.id);
     const productIndex = products.findIndex(product => product._id === props.id);
     let newProductsArray = [...products];
     let newItemsInCartArray = [...itemsInCart];
 
-    if (
-      itemsInCart[itemsInCartIndex]
+// הורדת מוצרים מהכפתור שעל המוצרים שבחנות
+    if (props.identity === 'shop') {
+      if (itemsInCart[itemsInCartIndex]) {
+        if
+          (itemsInCart[itemsInCartIndex].quantity === 1) {
+          newItemsInCartArray[itemsInCartIndex] = null;
+          setItemsInCart(newItemsInCartArray);
+  
+          newProductsArray[productIndex] = { ...newProductsArray[productIndex], quantity: products[productIndex].quantity + 1 };
+          setProducts(newProductsArray);
+                
+          setCartCount(cartCount - 1)
 
-    )
-    
-    {
+          removeFromCart()
 
+        }
+        else {
+          setCartCount(cartCount - 1)
+          newItemsInCartArray[itemsInCartIndex] = { ...newItemsInCartArray[itemsInCartIndex], quantity: itemsInCart[itemsInCartIndex].quantity - 1 };
+          setItemsInCart(newItemsInCartArray);
 
-      if
-        (itemsInCart[itemsInCartIndex].quantity === 1) {
-
-        // let newItemsInCartArray = [...itemsInCart];
-        newItemsInCartArray[itemsInCartIndex] = null;
-        setItemsInCart(newItemsInCartArray);
-
-        newProductsArray[productIndex] = { ...newProductsArray[productIndex], quantity: products[productIndex].quantity + 1 };
-        setProducts(newProductsArray);
-      
-        setCartCount(cartCount - 1)
-
-        removeFromCart()
-
+          newProductsArray[productIndex] = { ...newProductsArray[productIndex], quantity: products[productIndex].quantity + 1 };
+          setProducts(newProductsArray);
+        }
       }
+    }
+
+          // הורדת מוצרים מתוך מוצר שבעגלה
+  else if (props.identity === 'cart') {
      
-      else 
-      {
+          if
+          (itemsInCart[itemsInCartIndex].quantity === 1) {
+          newItemsInCartArray[itemsInCartIndex] = null;
+          setItemsInCart(newItemsInCartArray);
+  
+          newProductsArray[productIndex] = { ...newProductsArray[productIndex], quantity: products[productIndex].quantity + 1 };
+          setProducts(newProductsArray);
+                
+          setCartCount(cartCount - 1)
 
-        setCartCount(cartCount - 1)
+          removeFromCart()
 
-        newItemsInCartArray[itemsInCartIndex] = { ...newItemsInCartArray[itemsInCartIndex], quantity: itemsInCart[itemsInCartIndex].quantity -1 };
-        setItemsInCart(newItemsInCartArray);
+        }
+          else 
+          {
+            setCartCount(cartCount - 1)
 
-        newProductsArray[productIndex] = { ...newProductsArray[productIndex], quantity: products[productIndex].quantity + 1 };
-        setProducts(newProductsArray);
-      
-      }
-    };
+            newItemsInCartArray[itemsInCartIndex] = { ...newItemsInCartArray[itemsInCartIndex], quantity: itemsInCart[itemsInCartIndex].quantity -1 };
+            setItemsInCart(newItemsInCartArray);
+
+            newProductsArray[productIndex] = { ...newProductsArray[productIndex], quantity: products[productIndex].quantity + 1 };
+            setProducts(newProductsArray);
+    
+          
+        }
+    }
   };
 
   const removeFromCart = () => {
     setItemsInCart(itemsInCart.filter((productToRemoveFromCart) =>
-      props.id !== productToRemoveFromCart.id,
-      setCheckIfClicked(true),
+      props.id !== productToRemoveFromCart._id,
+
 
     ))
   };
 
- 
+  
+
   return (
   <div>
     {props.identity === "shop" ? (

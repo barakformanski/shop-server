@@ -76,8 +76,8 @@ const Products = (props) => {
           )
           .map((product) => (
             // <div className="product" >
-              <Product
-                identity={props.identity}
+              <Product identity={props.identity}
+            
                 key={product._id}
                 id={product._id}
                 title={product.title}
@@ -85,7 +85,8 @@ const Products = (props) => {
                 src={product.image}
                 quantityInShop={product.quantity}
                 description={product.description}
-                quantityInCart={product.quantity}
+              quantityInCart={product.quantity}
+            
               />
             // </div>
 
