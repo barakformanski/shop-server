@@ -5,7 +5,7 @@ import "./app.css";
 import Header from "../header/Header";
 import Products from "../products/Products.js";
 import AdminPage from "../../pages/adminPage/AdminPage.js"
-
+import UpdateProducts from '../../pages/UpdateProducts.js'
 import { Slider } from "antd";
 import Login from "../login/Login.js"
 import { BrowserRouter as Router, Route, Switch} from "react-router-dom";
@@ -213,7 +213,7 @@ function App(props) {
 
 
           <Header className="heder_component" />
-          <div style={{ padding: "30px" }}>
+          <div className="notification" style={{ padding: "10%",display:"inline-block" }}>
             {newProduct && newProduct.title &&
               <div>שים לב! מוצר חדש אפשרי לקניה {newProduct.title}</div>}
             {deletedProduct && deletedProduct.title &&
@@ -238,6 +238,10 @@ function App(props) {
 
             <Route exact path={`/Login`}>
               <Login />
+            </Route>
+
+            <Route exact path={`/adminLogin/UpdateProducts`}>
+              <UpdateProducts />
             </Route>
 
             <Route exact path={`/`}>

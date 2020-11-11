@@ -41,14 +41,14 @@
 
 }
 .header_text {
-    border-color: orange;
+    border-color: yellowgreen;
     border-style: solid;
     margin: 10px 10px 10px 10px;
     text-align: center;
     font-style: italic;
     font-family: monospace;
-    background-color: greenyellow;
-    color: orange;
+    background-color: yellowgreen;
+    color: white;
     display: table-cell;
     width: 40%;
     right: 25px;

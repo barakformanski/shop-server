@@ -45,7 +45,7 @@ const Product = (props) => {
         if (itemsInCartIndex===-1) {
           setItemsInCart(itemsInCart.concat([{ _id: props.id, title: props.title, price: props.price, image: props.src, quantity: 1 }]));
           let newProductsArray = [...products];
-          newProductsArray[productIndex] = { ...newProductsArray[productIndex], quantity: props.quantityInShop - 1 };
+          newProductsArray[productIndex] = { ...newProductsArray[productIndex], quantity: products[productIndex].quantity - 1 };
           setProducts(newProductsArray);
 
         }
@@ -208,10 +208,10 @@ else if (props.identity === 'cart') {
       {/* <Link to={`/products/${props.id}`}> */}
             <div>{props.title}</div>
             <div>כמות בעגלה: {props.quantityInCart}מוצרים</div>
-        <div>ש"ח {props.price}סה"כ לתשלום</div>
+        <div>לתשלום {props.price*props.quantityInCart}ש"ח</div>
 
-            <div><img src={props.src} /></div>
-            <button onClick={add_to_cart}>+</button>
+          <button onClick={add_to_cart}>+</button>
+          <div><img src={props.src} /></div>
           <button onClick={remove_from_cart}>-</button>
       {/* </Link> */}
     </div>

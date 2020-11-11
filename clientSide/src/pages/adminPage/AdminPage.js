@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useContext, useState } from "react";
+
 import axios from 'axios';
 import "./adminPage.css";
 import Products from "../../component/products/Products";
@@ -6,8 +7,10 @@ import socketIOClient from "socket.io-client";
 import Context from '../../component/Context.js';
 import UploadImage from "../../component/uploadComponent/Uploadimage.js";
 import { Link } from "react-router-dom";
-
-import { Form, Input, InputNumber, Button, Upload, Select } from 'antd';
+import EditableTable from '../UpdateProducts.js'
+import {
+     Button, Upload,Select, Table, Input, InputNumber,  Form
+}  from 'antd';
 
 
 const { Option } = Select;
@@ -101,8 +104,6 @@ const AdminPage = (props) => {
 
     
     const onFinish = (values) => {
-        console.log("values:", values);
-        // console.log(uploadedFile.files[0]);
 
         const newProduct = {
             title: values.product.title,
@@ -149,6 +150,8 @@ const AdminPage = (props) => {
                 alert(`המוצר ${productTitle}, שמספרו המזהה ${selectedProductToDelete} נמחק`);
             });
     }
+
+
     
     return (
         <div className="adminPage" dir="rtl">
@@ -159,9 +162,7 @@ const AdminPage = (props) => {
             < div className="delete_product">
                 <h1>מחיקת מוצר </h1>
 
-                <Form
-                    onFinish={onFinish}
-                >
+                <Form onFinish={onFinish} >
                     <Form.Item
                         name="select"
                         label="Select"
@@ -188,8 +189,23 @@ const AdminPage = (props) => {
                     <input className="deletedProductInput" type="text" size="big" ref={idTodelete} placeholder="  או הכנס את ה id של המוצר" />
 
                 </Form>
+
                 <div className="update_quantity">
                     <h1>עדכון מלאי מוצר </h1>
+
+                    <Link to={`/adminLogin/UpdateProducts`}>
+                    <button className="update_products_button">עדכן פרטי מוצר</button>
+                </Link>
+
+                    <Select placeholder="בחר מוצר לעדכון"
+                            onChange={onChange}
+                        >
+                            {products.map((product) => (
+                                <Option key={product._id} value={product._id} title={product.title} >
+                                    {product.title}
+                                </Option>
+                            ))}
+                        </Select>
                     <input className="deletedProductInput" type="text" ref={idToUpdate} placeholder="של המוצר שברצונך לעדכן id הכנס את ה" />
                     <button className="send id" onClick={idToUpdate}>לחץ כדי לעדכן</button>
                 </div>
@@ -280,9 +296,16 @@ const AdminPage = (props) => {
                     </Form>
 {/* <div>תמונתך נתקבלה, לחץ "שלח" להשלמת העלאת המוצר</div> */}
 
+                    
+
                 </div>
             </div>
-        </div >);
+
+        
+           
+
+        </div >
+    );
 
 }
 
