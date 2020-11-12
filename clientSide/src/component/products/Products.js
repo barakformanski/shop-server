@@ -4,8 +4,8 @@ import socketIOClient from "socket.io-client";
 
 import Product from "../product/product.js";
 import axios from "axios";
-import createPersistedState from "use-persisted-state";
 import Context from '../Context';
+import createPersistedState from "use-persisted-state";
 
 
 const Products = (props) => {
@@ -24,7 +24,7 @@ const Products = (props) => {
       .then((res) => {
         const productsarray = res.data;
         setProducts(productsarray);
-        
+
         console.log("costumer details:", name, email, password);
       });
   }, []);

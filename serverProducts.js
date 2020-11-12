@@ -397,6 +397,19 @@ app.delete(`${PREFIX}/products/:id`, async (req, res) => {
 //     });
 // });
 
+app.put(`${PREFIX}/updateProduct`, async (req, res) => {
+    try {
+
+    console.log(req.body._id);
+    mongoose.set('useFindAndModify', false);
+    await Product.findByIdAndUpdate({ _id: req.body._id },req.body)
+    res.send('ok')
+
+
+} catch (err) {
+    res.status(500).send(err)
+}
+})
 
 app.put(`${PREFIX}/update_product/:id`, async (req, res) => {
     try {
@@ -406,7 +419,6 @@ app.put(`${PREFIX}/update_product/:id`, async (req, res) => {
         console.log("Product saved:", Product);
         await Product.save();
         console.log("Product saved:", Product);
-        // io.emit("product_updated", Product);
 
         res.send(Product, "product updated sucssefully!!!");
         io.emit("product_updated", req.params.id, req.body);
@@ -421,69 +433,18 @@ app.put(`${PREFIX}/update_product/:id`, async (req, res) => {
 
     // להשמיש!!!!
 app.get("*", (req, res) => {
-    res.sendFile(__dirname + "/clientSide/build/index.html");
-    // const productsFromDB = await Product.find();
-    // console.log("got products");
-    // console.log("products from Mongo DB:", productsFromDB);
-
-    // try {
-    //     res.send(productsFromDB);
-    // } catch (err) {
-    //     res.status(500).send(err);
-    // }
-  });
-
-// // loading all the products to application
-// app.get("/products", async (req, res) => {
-//     console.log("products from mongoDB can be used now");
-//     console.log("QUERY:", req.query);
-//     const { search } = req.query;
-//     // const data = await readFile("products.json");
-//     // const products = JSON.parse(data);
-//     if (search) {
-//         const filteredProducts = data.filter((product) => product.title.includes(search));
-//         res.send(filteredProducts);
-//     } else {
-//         res.send(data);
-//     }
-
-// });
-
-// const searchedData = await Product.find({ title: "ג'ל אלוורה  למריחה" }).exec();
-// console.log("searchedData:", searchedData);
-
-//  for admin only - update quantity
-// app.put("/update_quantity/:id", (req, res) => {
-//     const productId = +req.params.id;
-//     const productIndex = data.findIndex((product) => product.id === productId);
-//     data[productIndex].quantity = req.body.quantity;
-//     data[productIndex].image = req.body.image;
-//     const newQuantityOfProuduct = {
-//         id: productId,
-//         quantity: data[productIndex].quantity
-//     }
-//     // const newimageOfProuduct = {
-//     //     id: productId,
-//     //     image: data[productIndex].image
-//     // }
-//     res.send("quantity/image updated!!!");
-
-//     io.emit("quantity_updated", newQuantityOfProuduct
-//         // , newimageOfProuduct
-//     )
-
-// });
+    res.sendFile(__dirname + "/clientSide/build/index.html")
+});
 
 
 
-
-// console.log("QUERY:", req.query);
-// const { search } = req.query;
-// // const data = await readFile("products.json");
-// // const products = JSON.parse(data);
-// if (search) {
-//     const filteredProducts = data.filter((product) => product.title.includes(search));
-//     res.send(filteredProducts);
-// } else {
-//     res.send(data);
-// }
+app.get(`${PREFIX}/products/adminLogin/UpdateProducts`, async (req, res) => {
+    
+        const productsFromDB = await Product.find();
+        console.log("got products");
+        try {
+            res.send(productsFromDB);
+        } catch (err) {
+            res.status(500).send(err);
+        }
+})

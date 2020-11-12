@@ -132,6 +132,7 @@ const AdminPage = (props) => {
                 setProducts(productsarray);
             });
     }, [newProduct, deletedProduct]);
+    
     const idTodelete = useRef();
     const idToUpdate = useRef();
 

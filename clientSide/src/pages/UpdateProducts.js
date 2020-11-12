@@ -1,6 +1,6 @@
-import React, { useState,useContext } from 'react';
+import React, { useState,useContext,useEffect } from 'react';
 import { Table, Input, InputNumber, Popconfirm, Form } from 'antd';
-
+import axios from "axios";
 import Context from '../component/Context';
 
 
@@ -58,9 +58,19 @@ const EditableCell = ({
 const EditableTable = () => {
     const [form] = Form.useForm();
 //   const [data, setData] = useState(originData);
-const {products} = useContext(Context);
-console.log(products);
-  const [data, setData] = useState(products);
+    const { PREFIX, products, setProducts } = useContext(Context);
+  
+    useEffect(() => {
+      axios.get(`${PREFIX}/products`)
+         .then((res) => {
+        const productsarray = res.data;
+        setProducts(productsarray);
+      });
+      
+  }, []);
+
+
+   const [data, setData] = useState(products);
   const [editingKey, setEditingKey] = useState('');
 
 //   const isEditing = (record) => record.key === editingKey;
@@ -115,21 +125,34 @@ const isEditing = (record) => record._id === editingKey;
 //       console.log('Validate Failed:', errInfo);
 //     }
 //   };
-  const save = async (_id) => {
-    try {
-      const row = await form.validateFields();
-      const newData = [...data];
-      const index = newData.findIndex((item) => _id === item._id);
 
-      if (index > -1) {
-        const item = newData[index];
-        newData.splice(index, 1, { ...item, ...row });
-        setData(newData);
-        setEditingKey('');
+    let newData = '';
+    let index = '';
+  const save =  async (_id) => {
+    try {
+        const row = await form.validateFields();
+        newData = [...data];
+      index = newData.findIndex((item) => _id === item._id);
+        if (index > -1) {
+        //   האיבר שצריך לעדכן
+          const item = newData[index];
+          console.log(item._id);
+          newData.splice(index, 1, { ...item, ...row });
+        //   המערך החדש עם האביר המעודכן
+          setData(newData);
+
+            setEditingKey('');
+            upload();
+        //   console.log("data:",data);
+        //   console.log("item",item);
+        //   console.log("newData[index]",newData[index]);
+        //   setProducts(newData);
+        //   console.log("newData:",newData);
+        //   console.log(products);
       } else {
         newData.push(row);
         setData(newData);
-        setEditingKey('');
+          setEditingKey('');        
       }
     } catch (errInfo) {
       console.log('Validate Failed:', errInfo);
@@ -209,7 +232,7 @@ const isEditing = (record) => record._id === editingKey;
             </a> */}
             <a
               href="javascript:;"
-              onClick={() => save(record._id)}
+                    onClick={() =>  save(record._id) }
               style={{
                 marginRight: 8,
               }}
@@ -235,17 +258,27 @@ const isEditing = (record) => record._id === editingKey;
 
     return {
       ...col,
-      onCell: (record) => ({
-        record,
-        inputType: col.dataIndex === 'age' ? 'number' : 'text',
+        onCell: (record) => ({
+            record,
+            // צריך להגדיר נכון גם את quantity וגם את image
+            inputType: col.dataIndex ===  'price'  ? 'number' : 'text',
         dataIndex: col.dataIndex,
         title: col.title,
         editing: isEditing(record),
       }),
     };
   });
+
+
+    const upload =
+      () => {
+          console.log('upload');
+          console.log(newData[index]);
+        axios.put(`${PREFIX}/updateProduct`, newData[index])
+        }
+    
   return (
-    <Form form={form} component={false}>
+      <Form form={form} component={false}>
       <Table
         components={{
           body: {
