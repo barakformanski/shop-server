@@ -202,12 +202,12 @@ const isEditing = (record) => record._id === editingKey;
       width: '11%',
       editable: true,
     },
-    // {
-    //   title: 'image',
-    //   dataIndex: 'image',
-    //   width: '11%',
-    //   editable: true,
-    // },
+    {
+      title: 'image',
+      dataIndex: 'image',
+      width: '11%',
+      editable: true,
+    },
     {
       title: 'description',
       dataIndex: 'description',
