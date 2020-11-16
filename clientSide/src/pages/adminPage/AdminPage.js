@@ -120,10 +120,12 @@ const AdminPage = (props) => {
             // .post(`http://127.0.0.1:5000${PREFIX}/products`, newProduct)
             .post(`${PREFIX}/products`, newProduct)
             .then((res) => {
-                // console.log("newProduct:", newProduct)
+                console.log("newProduct:", res.data)
                 // console.log(res);
             });
+        alert("product added succesfuly")
     }
+    
     useEffect(() => {
         // axios.get(`http://localhost:5000${PREFIX}/products`)
         axios.get(`${PREFIX}/products`)

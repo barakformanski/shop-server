@@ -402,8 +402,8 @@ app.put(`${PREFIX}/updateProduct`, async (req, res) => {
 
     console.log(req.body._id);
     mongoose.set('useFindAndModify', false);
-    await Product.findByIdAndUpdate({ _id: req.body._id },req.body)
-    res.send('ok')
+   const product= await Product.findByIdAndUpdate({ _id: req.body._id },req.body)
+        res.send(product);
 
 
 } catch (err) {
@@ -411,40 +411,28 @@ app.put(`${PREFIX}/updateProduct`, async (req, res) => {
 }
 })
 
-app.put(`${PREFIX}/update_product/:id`, async (req, res) => {
-    try {
-        mongoose.set('useFindAndModify', false);
-        await Product.findByIdAndUpdate(req.params.id, req.body)
-        console.log("test", "req.params.id:", req.params.id, "req.body:", req.body);
-        console.log("Product saved:", Product);
-        await Product.save();
-        console.log("Product saved:", Product);
+// app.put(`${PREFIX}/update_product/:id`, async (req, res) => {
+//     try {
+//         mongoose.set('useFindAndModify', false);
+//         await Product.findByIdAndUpdate(req.params.id, req.body)
+//         console.log("test", "req.params.id:", req.params.id, "req.body:", req.body);
+//         console.log("Product saved:", Product);
+//         await Product.save();
+//         console.log("Product saved:", Product);
 
-        res.send(Product, "product updated sucssefully!!!");
-        io.emit("product_updated", req.params.id, req.body);
-        console.log("updatedproduct", Product);
-        console.log("updatedproduct after emit", Product);
+//         res.send(Product, "product updated sucssefully!!!");
+//         io.emit("product_updated", req.params.id, req.body);
+//         console.log("updatedproduct", Product);
+//         console.log("updatedproduct after emit", Product);
 
-    } catch (err) {
-        res.status(500).send(err)
-    }
-})// app.use('/', Routes);
-    ;
+//     } catch (err) {
+//         res.status(500).send(err)
+//     }
+// })// app.use('/', Routes);
+    // ;
 
     // להשמיש!!!!
 app.get("*", (req, res) => {
     res.sendFile(__dirname + "/clientSide/build/index.html")
 });
 
-
-
-app.get(`${PREFIX}/products/adminLogin/UpdateProducts`, async (req, res) => {
-    
-        const productsFromDB = await Product.find();
-        console.log("got products");
-        try {
-            res.send(productsFromDB);
-        } catch (err) {
-            res.status(500).send(err);
-        }
-})

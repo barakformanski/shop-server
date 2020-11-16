@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import "./products.css";
 import socketIOClient from "socket.io-client";
 
@@ -17,21 +17,19 @@ const Products = (props) => {
 
 
 
-
   useEffect(() => {
     axios.get(`${PREFIX}/products`)
-    // axios.get(`http://localhost:5000${PREFIX}/products`)
       .then((res) => {
         const productsarray = res.data;
         setProducts(productsarray);
-
         console.log("costumer details:", name, email, password);
+        console.log("products from server:",res.data);
+
       });
-  }, []);
-
-
+  }, [])
+   
+  
   useEffect(() => {
-    // axios.get(`http://localhost:5000${PREFIX}/products`)
     axios.get(`${PREFIX}/products`)
       .then((res) => {
         const productsarray = res.data;
@@ -40,16 +38,13 @@ const Products = (props) => {
       });
   }, [deletedProduct, newProduct,]);
 
-  // console.log("userSearch:", userSearch);
 
 
   // search
   useEffect(() => {
-    // axios.get(`http://localhost:5000${PREFIX}/products/?search=${userSearch}`)
     axios.get(`${PREFIX}/products/?search=${userSearch}`)
 
       .then((res) => {
-        console.log(res);
         console.log("userSearch:", userSearch);
 
         const products = res.data;
@@ -61,19 +56,21 @@ const Products = (props) => {
 // console.log(products);
 
 
-
+// console.log(   props.products
+//   .filter(
+//     (product) =>
+//       product.price >= props.range[0] && product.price <= props.range[1]
+//   ));
 
 
   return (
     <div className="mapOfProducts">
-
-
       {
         props.products
-          .filter(
-            (product) =>
-              product.price >= props.range[0] && product.price <= props.range[1]
-          )
+          // .filter(
+          //   (product) =>
+          //     product.price >= props.range[0] && product.price <= props.range[1]
+          // )
           .map((product) => (
             // <div className="product" >
               <Product identity={props.identity}
@@ -92,9 +89,6 @@ const Products = (props) => {
 
           ))
       }
-
-      {/* <Cart /> */}
-
 
     </div >
   );

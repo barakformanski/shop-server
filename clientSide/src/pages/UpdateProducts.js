@@ -60,14 +60,6 @@ const EditableTable = () => {
 //   const [data, setData] = useState(originData);
     const { PREFIX, products, setProducts } = useContext(Context);
   
-    useEffect(() => {
-      axios.get(`${PREFIX}/products`)
-         .then((res) => {
-        const productsarray = res.data;
-        setProducts(productsarray);
-      });
-      
-  }, []);
 
 
    const [data, setData] = useState(products);
@@ -275,6 +267,10 @@ const isEditing = (record) => record._id === editingKey;
           console.log('upload');
           console.log(newData[index]);
         axios.put(`${PREFIX}/updateProduct`, newData[index])
+          .then((res) => {
+            console.log(' updateres:', res);
+          });
+        alert("המוצר התעדכן בהצלחה")
         }
     
   return (
