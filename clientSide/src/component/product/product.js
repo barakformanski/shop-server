@@ -1,222 +1,255 @@
-import React, {  useContext } from "react";
+import React, { useContext } from "react";
 import "./Product.css";
-import Context from '../Context';
-import axios from 'axios';
+import Context from "../Context";
+import axios from "axios";
 import { BrowserRouter as Router, Link } from "react-router-dom";
 
 const Product = (props) => {
-
   const {
-    PREFIX,cartCount, setCartCount, products,setProducts,itemsInCart, setItemsInCart, name, email, password, cartId, userLogin,
+    PREFIX,
+    cartCount,
+    setCartCount,
+    products,
+    setProducts,
+    itemsInCart,
+    setItemsInCart,
+    name,
+    email,
+    password,
+    cartId,
+    userLogin,
   } = useContext(Context);
-
 
   const userAndProduct = {
     name: name,
     email: email,
     password: password,
     cartId: Number,
-    productTitle: props.title
-  }
+    productTitle: props.title,
+  };
 
   const add_to_cart = () => {
-    let productIndex = products.findIndex(product => product._id === props.id);
+    let productIndex = products.findIndex(
+      (product) => product._id === props.id
+    );
 
+    // לשמור את הנתונים localstorage'
     if (userLogin) {
-
       console.log("user details arrived:", name, email, password, cartId);
-      // axios.post(`http://localhost:5000${PREFIX}/userCart`, userAndProduct).then((res) => {
-      axios.post(`${PREFIX}/userCart`, userAndProduct).then((res) => {
-        console.log("responsed arrived");
-        console.log("res: cartId:", res.data);
+      // axios.post(`${PREFIX}/userCart`, userAndProduct).then((res) => {
+      // console.log("responsed: cartId:", res.data);
+      // });
+    }
 
-      });
-    };
-   
-   
     //  הוספת מוצרים מתוך לחצן המוצרים שבתוך החנות
-    if
-      (props.identity === 'shop') {
+    if (props.identity === "shop") {
       if (products[productIndex].quantity) {
-        setCartCount(cartCount + 1)
+        setCartCount(cartCount + 1);
 
-          const itemsInCartIndex = itemsInCart.findIndex(item => item._id === props.id);
+        const itemsInCartIndex = itemsInCart.findIndex(
+          (item) => item._id === props.id
+        );
 
-        if (itemsInCartIndex===-1) {
-          setItemsInCart(itemsInCart.concat([{ _id: props.id, title: props.title, price: props.price, image: props.src, quantity: 1 }]));
+        if (itemsInCartIndex === -1) {
+          setItemsInCart(
+            itemsInCart.concat([
+              {
+                _id: props.id,
+                title: props.title,
+                price: props.price,
+                image: props.src,
+                quantity: 1,
+              },
+            ])
+          );
           let newProductsArray = [...products];
-          newProductsArray[productIndex] = { ...newProductsArray[productIndex], quantity: products[productIndex].quantity - 1 };
+          newProductsArray[productIndex] = {
+            ...newProductsArray[productIndex],
+            quantity: products[productIndex].quantity - 1,
+          };
           setProducts(newProductsArray);
+        } else {
+          const productIndex = products.findIndex(
+            (product) => product._id === props.id
+          );
 
-        }
-        else {
-          const productIndex = products.findIndex(product => product._id === props.id);
-
-          const itemsInCartIndex = itemsInCart.findIndex(item => item._id === props.id);
+          const itemsInCartIndex = itemsInCart.findIndex(
+            (item) => item._id === props.id
+          );
 
           let newItemsInCartArray = [...itemsInCart];
 
-          newItemsInCartArray[itemsInCartIndex] = { ...newItemsInCartArray[itemsInCartIndex], quantity: itemsInCart[itemsInCartIndex].quantity + 1 };
+          newItemsInCartArray[itemsInCartIndex] = {
+            ...newItemsInCartArray[itemsInCartIndex],
+            quantity: itemsInCart[itemsInCartIndex].quantity + 1,
+          };
           setItemsInCart(newItemsInCartArray);
 
           let newProductsArray = [...products];
-          newProductsArray[productIndex] = { ...newProductsArray[productIndex], quantity: products[productIndex].quantity - 1 };
+          newProductsArray[productIndex] = {
+            ...newProductsArray[productIndex],
+            quantity: products[productIndex].quantity - 1,
+          };
           setProducts(newProductsArray);
-
-
-        };
-
-      }
-      else {
+        }
+      } else {
         // להוסיף הודעה למנהל שהמוצר אזל
         alert("מלאי מוצר זה אזל");
       }
     }
 
- // הוספת מוצרים מתוך מוצר שכבר בעגלה
-else if (props.identity === 'cart') {
+    // הוספת מוצרים מתוך מוצר שכבר בעגלה
+    else if (props.identity === "cart") {
+      const itemsInCartIndex = itemsInCart.findIndex(
+        (item) => item._id === props.id
+      );
+      productIndex = products.findIndex((product) => product._id === props.id);
 
+      if (products[productIndex].quantity) {
+        let newItemsInCartArray = [...itemsInCart];
 
-  const itemsInCartIndex = itemsInCart.findIndex(item => item._id === props.id);
-  productIndex = products.findIndex(product => product._id === props.id);
+        newItemsInCartArray[itemsInCartIndex] = {
+          ...newItemsInCartArray[itemsInCartIndex],
+          quantity: itemsInCart[itemsInCartIndex].quantity + 1,
+        };
 
-  if (products[productIndex].quantity) {
-  
-    let newItemsInCartArray = [...itemsInCart];
+        setItemsInCart(newItemsInCartArray);
 
-    newItemsInCartArray[itemsInCartIndex] = { ...newItemsInCartArray[itemsInCartIndex], quantity: itemsInCart[itemsInCartIndex].quantity + 1};
-    
-    setItemsInCart(newItemsInCartArray);
+        let newProductsArray = [...products];
+        newProductsArray[productIndex] = {
+          ...newProductsArray[productIndex],
+          quantity: products[productIndex].quantity - 1,
+        };
+        setProducts(newProductsArray);
 
-    let newProductsArray = [...products];
-    newProductsArray[productIndex] = { ...newProductsArray[productIndex], quantity: products[productIndex].quantity - 1 };
-    setProducts(newProductsArray);
-
-    setCartCount(cartCount + 1)
-
-  }
-  if (!products[productIndex].quantity) {
-    alert("אזל");
-    // להוסיף הודעה למנהל שהמוצר אזל
-    // alert("מלאי מוצר זה אזל")
-  }
-  // }
-}
-
-
-  }
+        setCartCount(cartCount + 1);
+      }
+      if (!products[productIndex].quantity) {
+        alert("אזל");
+        // להוסיף הודעה למנהל שהמוצר אזל
+        // alert("מלאי מוצר זה אזל")
+      }
+      // }
+    }
+  };
 
   const remove_from_cart = () => {
-    const itemsInCartIndex = itemsInCart.findIndex(item => item._id === props.id);
-    const productIndex = products.findIndex(product => product._id === props.id);
+    const itemsInCartIndex = itemsInCart.findIndex(
+      (item) => item._id === props.id
+    );
+    const productIndex = products.findIndex(
+      (product) => product._id === props.id
+    );
     let newProductsArray = [...products];
     let newItemsInCartArray = [...itemsInCart];
 
-// הורדת מוצרים מהכפתור שעל המוצרים שבחנות
-    if (props.identity === 'shop') {
+    // הורדת מוצרים מהכפתור שעל המוצרים שבחנות
+    if (props.identity === "shop") {
       if (itemsInCart[itemsInCartIndex]) {
-        if
-          (itemsInCart[itemsInCartIndex].quantity === 1) {
+        if (itemsInCart[itemsInCartIndex].quantity === 1) {
           newItemsInCartArray[itemsInCartIndex] = null;
           setItemsInCart(newItemsInCartArray);
-  
-          newProductsArray[productIndex] = { ...newProductsArray[productIndex], quantity: products[productIndex].quantity + 1 };
+
+          newProductsArray[productIndex] = {
+            ...newProductsArray[productIndex],
+            quantity: products[productIndex].quantity + 1,
+          };
           setProducts(newProductsArray);
-                
-          setCartCount(cartCount - 1)
 
-          removeFromCart()
+          setCartCount(cartCount - 1);
 
-        }
-        else {
-          setCartCount(cartCount - 1)
-          newItemsInCartArray[itemsInCartIndex] = { ...newItemsInCartArray[itemsInCartIndex], quantity: itemsInCart[itemsInCartIndex].quantity - 1 };
+          removeFromCart();
+        } else {
+          setCartCount(cartCount - 1);
+          newItemsInCartArray[itemsInCartIndex] = {
+            ...newItemsInCartArray[itemsInCartIndex],
+            quantity: itemsInCart[itemsInCartIndex].quantity - 1,
+          };
           setItemsInCart(newItemsInCartArray);
 
-          newProductsArray[productIndex] = { ...newProductsArray[productIndex], quantity: products[productIndex].quantity + 1 };
+          newProductsArray[productIndex] = {
+            ...newProductsArray[productIndex],
+            quantity: products[productIndex].quantity + 1,
+          };
           setProducts(newProductsArray);
         }
       }
     }
 
-          // הורדת מוצרים מתוך מוצר שבעגלה
-  else if (props.identity === 'cart') {
-     
-          if
-          (itemsInCart[itemsInCartIndex].quantity === 1) {
-          newItemsInCartArray[itemsInCartIndex] = null;
-          setItemsInCart(newItemsInCartArray);
-  
-          newProductsArray[productIndex] = { ...newProductsArray[productIndex], quantity: products[productIndex].quantity + 1 };
-          setProducts(newProductsArray);
-                
-          setCartCount(cartCount - 1)
+    // הורדת מוצרים מתוך מוצר שבעגלה
+    else if (props.identity === "cart") {
+      if (itemsInCart[itemsInCartIndex].quantity === 1) {
+        newItemsInCartArray[itemsInCartIndex] = null;
+        setItemsInCart(newItemsInCartArray);
 
-          removeFromCart()
+        newProductsArray[productIndex] = {
+          ...newProductsArray[productIndex],
+          quantity: products[productIndex].quantity + 1,
+        };
+        setProducts(newProductsArray);
 
-        }
-          else 
-          {
-            setCartCount(cartCount - 1)
+        setCartCount(cartCount - 1);
 
-            newItemsInCartArray[itemsInCartIndex] = { ...newItemsInCartArray[itemsInCartIndex], quantity: itemsInCart[itemsInCartIndex].quantity -1 };
-            setItemsInCart(newItemsInCartArray);
+        removeFromCart();
+      } else {
+        setCartCount(cartCount - 1);
 
-            newProductsArray[productIndex] = { ...newProductsArray[productIndex], quantity: products[productIndex].quantity + 1 };
-            setProducts(newProductsArray);
-    
-          
-        }
+        newItemsInCartArray[itemsInCartIndex] = {
+          ...newItemsInCartArray[itemsInCartIndex],
+          quantity: itemsInCart[itemsInCartIndex].quantity - 1,
+        };
+        setItemsInCart(newItemsInCartArray);
+
+        newProductsArray[productIndex] = {
+          ...newProductsArray[productIndex],
+          quantity: products[productIndex].quantity + 1,
+        };
+        setProducts(newProductsArray);
+      }
     }
   };
 
   const removeFromCart = () => {
-    setItemsInCart(itemsInCart.filter((productToRemoveFromCart) =>
-      props.id !== productToRemoveFromCart._id,
-
-
-    ))
+    setItemsInCart(
+      itemsInCart.filter(
+        (productToRemoveFromCart) => props.id !== productToRemoveFromCart._id
+      )
+    );
   };
 
-  
-
   return (
-  <div>
-    {props.identity === "shop" ? (
-
-        <div  className="productInShop">
+    <div>
+      {props.identity === "shop" ? (
+        <div className="productInShop">
           <Link to={`/products/${props.id}`}>
             <div>{props.title}</div>
             <div>ש"ח {props.price}</div>
 
             <div>
-
               <img src={props.src} />
-
             </div>
           </Link>
-          <div className="quantity"> פריטים במלאי{ props.quantityInShop}</div>
-
+          <div className="quantity"> פריטים במלאי{props.quantityInShop}</div>
 
           <button onClick={add_to_cart}>+</button>
           <button onClick={remove_from_cart}>-</button>
         </div>
-      ) :
-      
+      ) : (
         <div className="productInCart">
-         
-      {/* <Link to={`/products/${props.id}`}> */}
-            <div>{props.title}</div>
-            <div>כמות בעגלה: {props.quantityInCart}מוצרים</div>
-        <div>לתשלום {props.price*props.quantityInCart}ש"ח</div>
+          {/* <Link to={`/products/${props.id}`}> */}
+          <div>{props.title}</div>
+          <div>כמות בעגלה: {props.quantityInCart}מוצרים</div>
+          <div>לתשלום {props.price * props.quantityInCart}ש"ח</div>
 
           <button onClick={add_to_cart}>+</button>
-          <div><img src={props.src} /></div>
+          <div>
+            <img src={props.src} />
+          </div>
           <button onClick={remove_from_cart}>-</button>
-      {/* </Link> */}
+          {/* </Link> */}
+        </div>
+      )}
     </div>
-      }
-      </div>
   );
 };
 

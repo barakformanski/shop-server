@@ -7,12 +7,13 @@ html {
 .app {
   border-color: green;
   border-style: solid;
-  height: auto;
-  margin: 10px 10px 10px 10px;
+  height: 100vh;
+  margin: 1%;
   position: relative;
+  width: 99%;
 }
-.get_products_button{
-  position: absolute;
+/* .get_products_button { */
+/* position: absolute;
   text-align: center;
   font-style: italic;
   font-family: monospace;
@@ -24,31 +25,47 @@ html {
   font-size: initial;
 }
 
-.local_storage_button{
+.local_storage_button {
   position: absolute;
   top: 36px;
   right: 109px;
   width: min-content;
+} */
+.notification {
+  font-size: 20px;
+  color: #2196f3;
 }
 
 .productsComponent {
-  border-style: solid;
-  border-color: orange;
-  margin: 10px 10px 10px 10px;
-  height: fit-content;
+  margin: 1%;
   width: 80%;
   display: inline-block;
-
-  /* position: absolute; */
+  height: 70%;
 }
-.cartComponent{
+
+.cartComponent {
   border-style: solid;
   border-color: purple;
-  margin: 10px 10px 10px 10px;
+  margin: 1% 1% 1% 0%;
+  height: -moz-fit-content;
   height: fit-content;
   width: 20%;
   display: inline-block;
-
-  /* float: left; */
   position: absolute;
+}
+
+#mydiv {
+  position: absolute;
+  z-index: 9;
+  background-color: #f1f1f1;
+  border: 1px solid #d3d3d3;
+  text-align: center;
+}
+
+#mydivheader {
+  padding: 10px;
+  cursor: move;
+  z-index: 10;
+  background-color: #2196f3;
+  color: #fff;
 }
