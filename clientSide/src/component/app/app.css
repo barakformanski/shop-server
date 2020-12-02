@@ -39,8 +39,11 @@ html {
 .productsComponent {
   margin: 1%;
   width: 80%;
-  display: inline-block;
+  /* display: inline-block; */
   height: 70%;
+
+  display: grid;
+  grid-template-rows: 30%30%30%;
 }
 
 .cartComponent {
@@ -49,9 +52,9 @@ html {
   margin: 1% 1% 1% 0%;
   height: -moz-fit-content;
   height: fit-content;
-  width: 20%;
-  display: inline-block;
-  position: absolute;
+  /* width: 20%; */
+  /* display: inline-block; */
+  /* position: absolute; */
 }
 
 #mydiv {
@@ -68,4 +71,9 @@ html {
   z-index: 10;
   background-color: #2196f3;
   color: #fff;
+}
+.productANDcartComponents {
+  display: grid;
+  grid-template-columns: 80%20%;
+  gap: 10px;
 }

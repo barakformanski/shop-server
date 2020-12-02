@@ -264,8 +264,8 @@ function App(props) {
 
             <Route exact path={`/`}>
               <Slider range defaultValue={[0, 100]} onChange={userRange} />
-
-              <div className="productsComponent">
+              <div className="productANDcartComponents">
+                {/* <div className="productsComponent"> */}
                 <Products
                   identity="shop"
                   products={products}
@@ -273,20 +273,21 @@ function App(props) {
                   userSearch={userSearch}
                   userImage={userImage}
                 />
-              </div>
+                {/* </div> */}
 
-              <div className="cartComponent">
-                <span> {cartCount} פריטים בסל </span>
-                <img
-                  alt="עגלת"
-                  src="https://static.wixstatic.com/media/63c9e6_4b3dd6fe61aa4548b5882a312746171e~mv2_d_1266_1280_s_2.png/v1/fill/w_350,h_350,al_c,q_85,usm_0.66_1.00_0.01/63c9e6_4b3dd6fe61aa4548b5882a312746171e~mv2_d_1266_1280_s_2.webp"
-                />
-                <Products
-                  identity="cart"
-                  products={itemsInCart}
-                  range={range}
-                  userSearch={userSearch}
-                />
+                <div className="cartComponent">
+                  <span> {cartCount} פריטים בסל </span>
+                  <img
+                    alt="עגלת"
+                    src="https://static.wixstatic.com/media/63c9e6_4b3dd6fe61aa4548b5882a312746171e~mv2_d_1266_1280_s_2.png/v1/fill/w_350,h_350,al_c,q_85,usm_0.66_1.00_0.01/63c9e6_4b3dd6fe61aa4548b5882a312746171e~mv2_d_1266_1280_s_2.webp"
+                  />
+                  <Products
+                    identity="cart"
+                    products={itemsInCart}
+                    range={range}
+                    userSearch={userSearch}
+                  />
+                </div>
               </div>
               <Footer />
               <div

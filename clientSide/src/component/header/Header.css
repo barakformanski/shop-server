@@ -3,9 +3,9 @@
 }
 
 .headers_buttons {
-  float: right;
+  float: left;
 }
 h1 {
-  float: left;
+  float: right;
   display: block;
 }

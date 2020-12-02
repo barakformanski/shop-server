@@ -39,9 +39,17 @@ const Products = (props) => {
 
   const paymentPage = () => {};
 
+  let mapOfProducts = "";
+  if (props.identity === "shop") {
+    mapOfProducts = "productsInShop";
+  } else {
+    mapOfProducts = "productsInCart";
+  }
+
   return (
     <div>
-      <div className="mapOfProducts">
+      {/* <div className="mapOfProducts"> */}
+      <div className={mapOfProducts}>
         {props.products
           // .filter(
           //   (product) =>

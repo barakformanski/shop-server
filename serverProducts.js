@@ -215,79 +215,6 @@ console.log(process.env.NODE_ENV);
 
 // cheking git
 
-app.post(`${PREFIX}/userCart`, async (req, res) => {
-  const { name, password, email, productTitle } = req.body;
-  console.log("req.body:", req.body);
-  let user = await User.findOne({
-    name: name,
-    password: password,
-    email: email,
-  });
-
-  if (!user) {
-    console.log("it is a new user, let's create and save his profile to DB:");
-    user = new User(req.body);
-    await user.save();
-  }
-
-  console.log("new user:", user);
-  let cartId = user.cartId[0];
-
-  const userId = user._id;
-
-  // try {
-  // console.log("user:", user);
-  // console.log("userId:", userId);
-
-  if (!cartId) {
-    console.log("no cart id to this user, let's create his cart:");
-    const newCart = new Cart({ user: user._id });
-    await newCart.save();
-    console.log("newCart:", newCart);
-    cartId = newCart._id;
-    // console.log("cartId:", cartId);
-
-    await User.findByIdAndUpdate(
-      { _id: userId },
-      { cartId: [...user.cartId, cartId] }
-    );
-    // }
-    // io.emit("product_added", product)
-
-    // } catch (err) {
-    //     res.status(500).send(err);
-    // }
-  }
-  const product = await Product.findOne({ title: productTitle }).exec();
-  // console.log("product:", product);
-
-  const oldCart = await Cart.findOne({ _id: cartId });
-  const productInCart = await ProductInCart.findOne({ cart: cartId });
-  const quantityOnCart = 0;
-  if (!productInCart) {
-    const productInCart = new ProductInCart({
-      title: product.title,
-      cart: cartId,
-      quantityOnCart: quantityOnCart,
-    });
-    await productInCart.save();
-
-    await Cart.findByIdAndUpdate(
-      { _id: cartId },
-      { products: [...oldCart.products, productInCart._id] }
-    ).exec();
-  } else {
-    await ProductInCart.findOneAndUpdate(
-      { _id: productInCart._id },
-      { quantityOnCart: quantityOnCart + 1 }
-    );
-  }
-  // res.send("cartId:", cartId);
-  res.status(200).send(cartId.toString());
-
-  // res.send("finisehd!, productInCart:", ProductInCart);
-});
-
 app.post(`${PREFIX}/login`, (req, res) => {
   const { email, pass } = req.body;
   if (email === process.env.ADMIN_EMAIL && pass === process.env.ADMIN_PASS) {
@@ -356,11 +283,12 @@ app.put(`${PREFIX}/updateProduct`, async (req, res) => {
   }
 });
 
+// singIn or create user acount and cart
 app.post("/api/shop/newCart", async (req, res) => {
   const { itemsInCart, name, password, email } = req.body;
   let productsArray = [];
 
-  // find a customer (if he already exist) or create a new customer
+  // find a user (if he already exist) or create a new user
   let user = await User.findOne({
     name: name,
     password: password,

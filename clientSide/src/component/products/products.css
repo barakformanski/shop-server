@@ -1,8 +1,14 @@
-
-img{
-    
-height: 39px;
-width: 64px;
+img {
+  height: 39px;
+  width: 64px;
 }
-.quaninty{
-    margin: 33px 19px -45px 90px;}
+.quaninty {
+  margin: 33px 19px -45px 90px;
+}
+.productsInShop {
+  display: grid;
+  grid-template-columns: 33%33%33%;
+}
+productsInCart {
+  border-color: antiquewhite;
+}
