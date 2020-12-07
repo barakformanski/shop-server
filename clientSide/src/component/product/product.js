@@ -225,14 +225,16 @@ const Product = (props) => {
             <div>{props.title}</div>
             <div>ש"ח {props.price}</div>
 
-            <div>
+            <div className="productImage">
               <img src={props.src} />
             </div>
           </Link>
           <div className="quantity"> פריטים במלאי{props.quantityInShop}</div>
 
-          <button onClick={add_to_cart}>+</button>
-          <button onClick={remove_from_cart}>-</button>
+          <div className="productButtons">
+            <button onClick={add_to_cart}>+</button>
+            <button onClick={remove_from_cart}>-</button>
+          </div>
         </div>
       ) : (
         <div className="productInCart">
@@ -240,11 +242,11 @@ const Product = (props) => {
           <div>{props.title}</div>
           <div>כמות בעגלה: {props.quantityInCart}מוצרים</div>
           <div>לתשלום {props.price * props.quantityInCart}ש"ח</div>
-
-          <button onClick={add_to_cart}>+</button>
-          <div>
+          <div className="productImage">
             <img src={props.src} />
           </div>
+          <button onClick={add_to_cart}>+</button>
+
           <button onClick={remove_from_cart}>-</button>
           {/* </Link> */}
         </div>

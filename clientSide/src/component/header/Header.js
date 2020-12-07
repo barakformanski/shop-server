@@ -3,9 +3,6 @@ import "./Header.css";
 import { Link } from "react-router-dom";
 import Context from "../Context";
 
-// import 'ant-design-pro/dist/ant-design-pro.css';
-// import Login from 'ant-design-pro/lib/Login';
-
 function Header() {
   const { PREFIX, name, userLogin } = useContext(Context);
   const [userName, setUserName] = useState(",אורח");
@@ -18,7 +15,9 @@ function Header() {
 
   return (
     <div className="header">
-      <h1>!ברוכים הבאים לחנות האינטרנטית שלנו</h1>
+      <Link to={"/"}>
+        <h1>!ברוכים הבאים לחנות האינטרנטית שלנו</h1>
+      </Link>
       <Link to={`/adminLogIn`}>
         <span>{userName} ברוך הבא</span>
         <button className="headers_buttons">כניסת מנהל</button>

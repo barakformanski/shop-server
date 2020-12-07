@@ -1,14 +1,17 @@
-input{
-    width:max-content;
-
+input {
+  width: max-content;
 }
 
 .editable-row .ant-form-item-explain {
-    position: absolute;
-    top: 100%;
-    font-size: 12px;
-  }
+  position: absolute;
+  top: 100%;
+  font-size: 12px;
+}
 /* .uploadImage{ */
-    /* top: -131px; */
-    /* position: relative; */
+/* top: -131px; */
+/* position: relative; */
 /* } */
+.newProductInPut {
+  position: absolute;
+  float: right;
+}
